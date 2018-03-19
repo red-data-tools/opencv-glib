@@ -1,3 +1,4 @@
+#include <opencv-glib/enums.h>
 #include <opencv-glib/error.h>
 #include <opencv-glib/image.hpp>
 
@@ -28,6 +29,7 @@ gcv_image_class_init(GCVImageClass *klass)
 /**
  * gcv_image_read:
  * @filename: The filename to be read.
+ * @flags: The flags that control how to read an image.
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It reads an image from file. Image format is determined by the
@@ -39,9 +41,11 @@ gcv_image_class_init(GCVImageClass *klass)
  * Since: 1.0.0
  */
 GCVImage *
-gcv_image_read(const gchar *filename, GError **error)
+gcv_image_read(const gchar *filename,
+               GCVImageReadFlags flags,
+               GError **error)
 {
-  auto cv_matrix_raw = cv::imread(filename, cv::IMREAD_UNCHANGED);
+  auto cv_matrix_raw = cv::imread(filename, static_cast<int>(flags));
   if (cv_matrix_raw.empty()) {
     g_set_error(error,
                 GCV_ERROR,
