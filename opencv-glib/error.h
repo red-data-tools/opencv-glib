@@ -7,12 +7,14 @@ G_BEGIN_DECLS
 /**
  * GCVError:
  * @GCV_ERROR_IMAGE_READ: Image read error.
+ * @GCV_ERROR_IMAGE_WRITE: Image write error.
  * @GCV_ERROR_UNKNOWN: Unknown error.
  *
  * Since: 1.0.0
  */
 typedef enum {
   GCV_ERROR_IMAGE_READ,
+  GCV_ERROR_IMAGE_WRITE,
   GCV_ERROR_UNKNOWN,
 } GCVError;
 

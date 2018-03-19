@@ -33,6 +33,9 @@ gcv_image_class_init(GCVImageClass *klass)
  * Returns: (nullable) (transfer full):
  *   A newly read #GCVImage.
  *
+ * It reads an image from file. Image format is determined by the
+ * content, not by the extension of the filename.
+ *
  * Since: 1.0.0
  */
 GCVImage *
@@ -48,6 +51,44 @@ gcv_image_read(const gchar *filename, GError **error)
   }
   auto cv_matrix = std::make_shared<cv::Mat>(cv_matrix_raw);
   return gcv_image_new_raw(&cv_matrix);
+}
+
+/**
+ * gcv_image_write:
+ * @image: A #GCVImage.
+ * @filename: The filename to be read.
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error.
+ *
+ * It writes the image to file. Image format is determined from
+ * extension of the filename.
+ *
+ * Since: 1.0.0
+ */
+gboolean
+gcv_image_write(GCVImage *image,
+                const gchar *filename,
+                GError **error)
+{
+  auto cv_matrix = gcv_matrix_get_raw(GCV_MATRIX(image));
+  try {
+    if (!cv::imwrite(filename, *cv_matrix)) {
+      g_set_error(error,
+                  GCV_ERROR,
+                  GCV_ERROR_IMAGE_WRITE,
+                  "Failed to write image: %s", filename);
+      return FALSE;
+    }
+  } catch (cv::Exception exception) {
+    g_set_error(error,
+                GCV_ERROR,
+                  GCV_ERROR_IMAGE_WRITE,
+                "Failed to write image: %s: %s",
+                filename, exception.what());
+    return FALSE;
+  }
+  return TRUE;
 }
 
 G_END_DECLS

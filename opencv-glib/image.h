@@ -17,5 +17,8 @@ struct _GCVImageClass
 
 GCVImage *gcv_image_read(const gchar *filename,
                          GError **error);
+gboolean gcv_image_write(GCVImage *image,
+                         const gchar *filename,
+                         GError **error);
 
 G_END_DECLS
