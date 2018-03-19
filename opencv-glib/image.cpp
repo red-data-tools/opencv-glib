@@ -1,3 +1,4 @@
+#include <opencv-glib/error.h>
 #include <opencv-glib/image.hpp>
 
 G_BEGIN_DECLS
@@ -38,6 +39,13 @@ GCVImage *
 gcv_image_read(const gchar *filename, GError **error)
 {
   auto cv_matrix_raw = cv::imread(filename, cv::IMREAD_UNCHANGED);
+  if (cv_matrix_raw.empty()) {
+    g_set_error(error,
+                GCV_ERROR,
+                GCV_ERROR_IMAGE_READ,
+                "Failed to read image: %s", filename);
+    return NULL;
+  }
   auto cv_matrix = std::make_shared<cv::Mat>(cv_matrix_raw);
   return gcv_image_new_raw(&cv_matrix);
 }

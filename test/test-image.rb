@@ -8,5 +8,11 @@ class TestImage < Test::Unit::TestCase
         not image.empty?
       end
     end
+
+    def test_nonexistent
+      assert_raise(CV::Error::ImageRead) do
+        CV::Image.read(fixture_path("nonexistent.png").to_s)
+      end
+    end
   end
 end
