@@ -20,5 +20,9 @@ root_inc = include_directories('.')
 
 subdir('opencv-glib')
 
+if get_option('enable_gtk_doc')
+  subdir('doc/reference')
+endif
+
 run_test = find_program('test/run-test.sh')
 test('unit test', run_test)
