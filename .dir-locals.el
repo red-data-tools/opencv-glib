@@ -1,0 +1,6 @@
+((sh-mode .    ((indent-tabs-mode . nil)
+                (sh-indentation   . 2)
+                (sh-basic-offset  . 2)))
+ (meson-mode . ((indent-tabs-mode . nil)))
+ (c-mode .     ((indent-tabs-mode . nil)
+                (c-basic-offset   . 2)))
