@@ -1,13 +1,16 @@
 sources = files(
+  'image.cpp',
   'matrix.cpp',
 )
 
 c_headers = files(
+  'image.h',
   'matrix.h',
   'opencv-glib.h',
 )
 
 cpp_headers = files(
+  'image.hpp',
   'matrix.hpp',
   'opencv-glib.hpp',
 )

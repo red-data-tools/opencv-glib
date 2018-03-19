@@ -10,4 +10,6 @@ require "gi"
 
 CV = GI.load("CV")
 
+require_relative "helper/fixture"
+
 exit(Test::Unit::AutoRunner.run(true, test_dir.to_s))

@@ -21,6 +21,7 @@
   <chapter id="data">
     <title>Data</title>
     <xi:include href="xml/matrix.xml"/>
+    <xi:include href="xml/image.xml"/>
   </chapter>
 
   <chapter id="object-tree">
