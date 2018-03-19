@@ -30,11 +30,11 @@ gcv_image_class_init(GCVImageClass *klass)
  * @filename: The filename to be read.
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
- * Returns: (nullable) (transfer full):
- *   A newly read #GCVImage.
- *
  * It reads an image from file. Image format is determined by the
  * content, not by the extension of the filename.
+ *
+ * Returns: (nullable) (transfer full):
+ *   A newly read #GCVImage.
  *
  * Since: 1.0.0
  */
@@ -59,10 +59,10 @@ gcv_image_read(const gchar *filename, GError **error)
  * @filename: The filename to be read.
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
- * Returns: %TRUE on success, %FALSE if there was an error.
- *
  * It writes the image to file. Image format is determined from
  * extension of the filename.
+ *
+ * Returns: %TRUE on success, %FALSE if there was an error.
  *
  * Since: 1.0.0
  */
