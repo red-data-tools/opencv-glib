@@ -122,6 +122,13 @@ TODO: Examples
 
 TODO
 
+## License
+
+[The 3-Clause BSD license][bsd-3-clause]. See LICENSE for details.
+
+(Kouhei Sutou has a right to change the license including contributed
+patches.)
+
 [opencv]:https://opencv.org/
 
 [gobject-introspection]:https://wiki.gnome.org/Projects/GObjectIntrospection
@@ -135,3 +142,5 @@ TODO
 [gtk-doc]:https://www.gtk.org/gtk-doc/
 
 [homebrew]:https://brew.sh/
+
+[bsd-3-clause]:https://opensource.org/licenses/BSD-3-Clause
