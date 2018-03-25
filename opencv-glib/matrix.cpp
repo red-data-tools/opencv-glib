@@ -58,19 +58,6 @@ gcv_matrix_set_property(GObject *object,
 }
 
 static void
-gcv_matrix_get_property(GObject *object,
-                        guint prop_id,
-                        GValue *value,
-                        GParamSpec *pspec)
-{
-  switch (prop_id) {
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
-    break;
-  }
-}
-
-static void
 gcv_matrix_init(GCVMatrix *object)
 {
 }
@@ -84,7 +71,6 @@ gcv_matrix_class_init(GCVMatrixClass *klass)
 
   gobject_class->finalize     = gcv_matrix_finalize;
   gobject_class->set_property = gcv_matrix_set_property;
-  gobject_class->get_property = gcv_matrix_get_property;
 
   spec = g_param_spec_pointer("matrix",
                               "Matrix",
