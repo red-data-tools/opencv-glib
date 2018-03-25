@@ -12,7 +12,7 @@ G_BEGIN_DECLS
  * Since: 1.0.0
  */
 
-typedef struct GCVMatrixPrivate_ {
+typedef struct {
   std::shared_ptr<cv::Mat> matrix;
 } GCVMatrixPrivate;
 
