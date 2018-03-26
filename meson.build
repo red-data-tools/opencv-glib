@@ -7,7 +7,7 @@ so_version = '1'
 library_version = '@0@.0.0'.format(so_version)
 
 c_compiler = meson.get_compiler('c')
-cpp_compiler_id = meson.get_compiler('cpp')
+cpp_compiler = meson.get_compiler('cpp')
 
 prefix = get_option('prefix')
 include_dir = join_paths(prefix, get_option('includedir'))
