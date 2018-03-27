@@ -56,8 +56,7 @@ pkgconfig.generate(filebase: meson.project_name(),
                    description: 'C API for OpenCV based on GLib',
                    version: meson.project_version(),
                    requires: ['gobject-2.0', 'opencv'],
-                   libraries: [libopencv_glib],
-                   subdirs: ['opencv-glib'])
+                   libraries: [libopencv_glib])
 
 opencv_glib_gir = gnome.generate_gir(libopencv_glib,
                                      sources: sources + c_headers + enums,
