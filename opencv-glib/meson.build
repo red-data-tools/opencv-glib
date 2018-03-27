@@ -1,12 +1,12 @@
 sources = files(
-  'error.cpp',
   'image.cpp',
+  'image-error.cpp',
   'matrix.cpp',
 )
 
 c_headers = files(
-  'error.h',
   'image.h',
+  'image-error.h',
   'matrix.h',
   'opencv-glib.h',
 )

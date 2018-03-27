@@ -1,6 +1,6 @@
 #include <opencv-glib/enums.h>
-#include <opencv-glib/error.h>
 #include <opencv-glib/image.hpp>
+#include <opencv-glib/image-error.h>
 
 G_BEGIN_DECLS
 
@@ -48,8 +48,8 @@ gcv_image_read(const gchar *filename,
   auto cv_matrix_raw = cv::imread(filename, static_cast<int>(flags));
   if (cv_matrix_raw.empty()) {
     g_set_error(error,
-                GCV_ERROR,
-                GCV_ERROR_IMAGE_READ,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_READ,
                 "Failed to read image: %s", filename);
     return NULL;
   }
@@ -79,15 +79,15 @@ gcv_image_write(GCVImage *image,
   try {
     if (!cv::imwrite(filename, *cv_matrix)) {
       g_set_error(error,
-                  GCV_ERROR,
-                  GCV_ERROR_IMAGE_WRITE,
+                  GCV_IMAGE_ERROR,
+                  GCV_IMAGE_ERROR_WRITE,
                   "Failed to write image: %s", filename);
       return FALSE;
     }
   } catch (cv::Exception exception) {
     g_set_error(error,
-                GCV_ERROR,
-                  GCV_ERROR_IMAGE_WRITE,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_WRITE,
                 "Failed to write image: %s: %s",
                 filename, exception.what());
     return FALSE;

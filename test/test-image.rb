@@ -11,7 +11,7 @@ class TestImage < Test::Unit::TestCase
     end
 
     def test_nonexistent
-      assert_raise(CV::Error::ImageRead) do
+      assert_raise(CV::ImageError::Read) do
         CV::Image.read(fixture_path("nonexistent.png").to_s, :unchanged)
       end
     end
@@ -35,7 +35,7 @@ class TestImage < Test::Unit::TestCase
 
       def test_unsupported_format
         unknown = Tempfile.new(["opnecv-glib-write", ".unknown"])
-        assert_raise(CV::Error::ImageWrite) do
+        assert_raise(CV::ImageError::Write) do
           @image.write(unknown.path)
         end
       end
