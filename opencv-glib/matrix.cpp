@@ -74,7 +74,7 @@ gcv_matrix_class_init(GCVMatrixClass *klass)
 
   spec = g_param_spec_pointer("matrix",
                               "Matrix",
-                              "The raw std::shared<cv::Matrix> *",
+                              "The raw std::shared<cv::Mat> *",
                               static_cast<GParamFlags>(G_PARAM_WRITABLE |
                                                        G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property(gobject_class, PROP_MATRIX, spec);
