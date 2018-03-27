@@ -3,8 +3,7 @@ project('opencv-glib', 'c', 'cpp',
         license: 'BSD-3-Clause')
 
 api_version = '1.0'
-so_version = '1'
-library_version = '@0@.0.0'.format(so_version)
+library_version = '1.0.0'
 
 c_compiler = meson.get_compiler('c')
 cpp_compiler = meson.get_compiler('cpp')

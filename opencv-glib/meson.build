@@ -43,7 +43,6 @@ libopencv_glib = library('opencv-glib',
                          include_directories: [
                            root_inc,
                          ],
-                         soversion: so_version,
                          version: library_version)
 libopencv_glib_dependency = declare_dependency(link_with: libopencv_glib,
                                                include_directories: [
