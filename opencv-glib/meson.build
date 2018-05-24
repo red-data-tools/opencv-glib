@@ -1,20 +1,28 @@
 sources = files(
+  'camera.cpp',
+  'camera-error.cpp',
   'image.cpp',
   'image-error.cpp',
   'matrix.cpp',
+  'video-capture.cpp',
 )
 
 c_headers = files(
+  'camera.h',
+  'camera-error.h',
   'image.h',
   'image-error.h',
   'matrix.h',
   'opencv-glib.h',
+  'video-capture.h',
 )
 
 cpp_headers = files(
+  'camera.hpp',
   'image.hpp',
   'matrix.hpp',
   'opencv-glib.hpp',
+  'video-capture.hpp',
 )
 
 enums = gnome.mkenums('enums',
