@@ -10,6 +10,7 @@ sources = files(
 c_headers = files(
   'camera.h',
   'camera-error.h',
+  'color.h',
   'image.h',
   'image-error.h',
   'matrix.h',

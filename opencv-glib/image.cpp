@@ -2,6 +2,8 @@
 #include <opencv-glib/image.hpp>
 #include <opencv-glib/image-error.h>
 
+#include <opencv2/imgproc.hpp>
+
 G_BEGIN_DECLS
 
 /**
@@ -93,6 +95,30 @@ gcv_image_write(GCVImage *image,
     return FALSE;
   }
   return TRUE;
+}
+
+/**
+ * gcv_image_convert_color:
+ * @image: A #GCVImage.
+ * @code: A code to specify how to convert color.
+ *
+ * It converts color of the image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A color converted #GCVImage.
+ *
+ * Since: 1.0.0
+ */
+GCVImage *
+gcv_image_convert_color(GCVImage *image,
+                        GCVColorConversionCode code)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+  cv::cvtColor(*cv_image,
+               *cv_converted_image,
+               static_cast<int>(code));
+  return gcv_image_new_raw(&cv_converted_image);
 }
 
 G_END_DECLS

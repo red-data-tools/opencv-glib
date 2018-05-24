@@ -40,5 +40,16 @@ class TestImage < Test::Unit::TestCase
         end
       end
     end
+
+    sub_test_case("#convert_color") do
+      def test_flip_flop
+        rgba = @image.convert_color(:bgra2rgba)
+        assert_not_equal(@image.bytes.to_s,
+                         rgba.bytes.to_s)
+        bgra = rgba.convert_color(:rgba2bgra)
+        assert_equal(@image.bytes.to_s,
+                     bgra.bytes.to_s)
+      end
+    end
   end
 end

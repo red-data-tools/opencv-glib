@@ -1,5 +1,6 @@
 #pragma once
 
+#include <opencv-glib/color.h>
 #include <opencv-glib/matrix.h>
 
 G_BEGIN_DECLS
@@ -72,5 +73,8 @@ GCVImage *gcv_image_read(const gchar *filename,
 gboolean gcv_image_write(GCVImage *image,
                          const gchar *filename,
                          GError **error);
+
+GCVImage *gcv_image_convert_color(GCVImage *iamge,
+                                  GCVColorConversionCode code);
 
 G_END_DECLS
