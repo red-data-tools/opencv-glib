@@ -23,6 +23,10 @@ class TestImage < Test::Unit::TestCase
                               :unchanged)
     end
 
+    test("#element_size") do
+      assert_equal(4, @image.element_size)
+    end
+
     sub_test_case("#write") do
       def test_success
         jpeg = Tempfile.new(["opnecv-glib-write", ".jpeg"])

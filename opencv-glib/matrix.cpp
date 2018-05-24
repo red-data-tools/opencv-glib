@@ -127,6 +127,22 @@ gcv_matrix_get_bytes(GCVMatrix *matrix)
                             cv_matrix->elemSize() * cv_matrix->total());
 }
 
+/**
+ * gcv_matrix_get_element_size:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: The element size of the matrix in bytes. An element contains
+ *  N channels. So the element size is `channel size * N`.
+ *
+ * Since: 1.0.0
+ */
+gsize
+gcv_matrix_get_element_size(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  return cv_matrix->elemSize();
+}
+
 G_END_DECLS
 
 GCVMatrix *
