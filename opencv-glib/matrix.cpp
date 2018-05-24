@@ -109,6 +109,24 @@ gcv_matrix_is_empty(GCVMatrix *matrix)
   return cv_matrix->empty();
 }
 
+/**
+ * gcv_matrix_get_bytes:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: (transfer full): The raw data of the matrix as #GBytes.
+ *   The raw data aren't copied. So you can't use the raw data when
+ *   the matrix is freed.
+ *
+ * Since: 1.0.0
+ */
+GBytes *
+gcv_matrix_get_bytes(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  return g_bytes_new_static(cv_matrix->ptr(),
+                            cv_matrix->elemSize() * cv_matrix->total());
+}
+
 G_END_DECLS
 
 GCVMatrix *
