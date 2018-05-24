@@ -188,6 +188,21 @@ gcv_matrix_get_n_rows(GCVMatrix *matrix)
   return cv_matrix->rows;
 }
 
+/**
+ * gcv_matrix_get_n_columns:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: The number of columns of the matrix in bytes.
+ *
+ * Since: 1.0.0
+ */
+gint
+gcv_matrix_get_n_columns(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  return cv_matrix->cols;
+}
+
 G_END_DECLS
 
 GCVMatrix *

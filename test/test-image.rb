@@ -39,6 +39,10 @@ class TestImage < Test::Unit::TestCase
       assert_equal(32, @image.n_rows)
     end
 
+    test("#n_columns") do
+      assert_equal(32, @image.n_columns)
+    end
+
     sub_test_case("#write") do
       def test_success
         jpeg = Tempfile.new(["opnecv-glib-write", ".jpeg"])
