@@ -74,7 +74,7 @@ gboolean gcv_image_write(GCVImage *image,
                          const gchar *filename,
                          GError **error);
 
-GCVImage *gcv_image_convert_color(GCVImage *iamge,
+GCVImage *gcv_image_convert_color(GCVImage *image,
                                   GCVColorConversionCode code);
 
 G_END_DECLS
