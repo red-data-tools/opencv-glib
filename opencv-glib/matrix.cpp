@@ -158,6 +158,21 @@ gcv_matrix_get_channel_size(GCVMatrix *matrix)
   return cv_matrix->elemSize1();
 }
 
+/**
+ * gcv_matrix_get_n_channels:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: The number of channels of the matrix in bytes.
+ *
+ * Since: 1.0.0
+ */
+gint
+gcv_matrix_get_n_channels(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  return cv_matrix->channels();
+}
+
 G_END_DECLS
 
 GCVMatrix *

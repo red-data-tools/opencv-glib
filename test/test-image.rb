@@ -31,6 +31,10 @@ class TestImage < Test::Unit::TestCase
       assert_equal(1, @image.channel_size)
     end
 
+    test("#n_channels") do
+      assert_equal(4, @image.n_channels)
+    end
+
     sub_test_case("#write") do
       def test_success
         jpeg = Tempfile.new(["opnecv-glib-write", ".jpeg"])
