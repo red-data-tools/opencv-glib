@@ -21,5 +21,6 @@ GBytes *gcv_matrix_get_bytes(GCVMatrix *matrix);
 gsize gcv_matrix_get_element_size(GCVMatrix *matrix);
 gsize gcv_matrix_get_channel_size(GCVMatrix *matrix);
 gint gcv_matrix_get_n_channels(GCVMatrix *matrix);
+gint gcv_matrix_get_n_rows(GCVMatrix *matrix);
 
 G_END_DECLS

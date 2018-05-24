@@ -173,6 +173,21 @@ gcv_matrix_get_n_channels(GCVMatrix *matrix)
   return cv_matrix->channels();
 }
 
+/**
+ * gcv_matrix_get_n_rows:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: The number of rows of the matrix in bytes.
+ *
+ * Since: 1.0.0
+ */
+gint
+gcv_matrix_get_n_rows(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  return cv_matrix->rows;
+}
+
 G_END_DECLS
 
 GCVMatrix *
