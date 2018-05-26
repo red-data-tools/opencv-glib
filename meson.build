@@ -19,7 +19,7 @@ root_inc = include_directories('.')
 
 subdir('opencv-glib')
 
-if get_option('enable_gtk_doc')
+if get_option('gtk_doc')
   subdir('doc/reference')
 endif
 
