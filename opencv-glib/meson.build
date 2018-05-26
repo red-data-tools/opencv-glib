@@ -1,6 +1,8 @@
 sources = files(
   'camera.cpp',
   'camera-error.cpp',
+  'cascade-classifier.cpp',
+  'cascade-classifier-error.cpp',
   'color.cpp',
   'image.cpp',
   'image-error.cpp',
@@ -12,6 +14,8 @@ sources = files(
 c_headers = files(
   'camera.h',
   'camera-error.h',
+  'cascade-classifier.h',
+  'cascade-classifier-error.h',
   'color.h',
   'image.h',
   'image-error.h',
@@ -23,6 +27,7 @@ c_headers = files(
 
 cpp_headers = files(
   'camera.hpp',
+  'cascade-classifier.hpp',
   'color.hpp',
   'image.hpp',
   'matrix.hpp',
@@ -45,13 +50,22 @@ enums_header = enums[1]
 headers = c_headers + cpp_headers
 install_headers(headers, subdir: meson.project_name())
 
+opencv = dependency('opencv')
+opencv_data_directory = join_paths(opencv.get_pkgconfig_variable('prefix'),
+				   'share',
+				   'opencv')
+config_h_data = configuration_data()
+config_h_data.set_quoted('OPENCV_DATA_DIRECTORY', opencv_data_directory)
+config_h = configure_file(input: 'config.h.meson',
+			  output: 'config.h',
+			  configuration: config_h_data)
 
 dependencies = [
-  dependency('opencv'),
+  opencv,
   dependency('gobject-2.0'),
 ]
 libopencv_glib = library('opencv-glib',
-                         sources: sources + enums,
+                         sources: sources + enums + [config_h],
                          install: true,
                          dependencies: dependencies,
                          include_directories: [

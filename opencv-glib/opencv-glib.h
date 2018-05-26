@@ -2,6 +2,8 @@
 
 #include <opencv-glib/camera.h>
 #include <opencv-glib/camera-error.h>
+#include <opencv-glib/cascade-classifier.h>
+#include <opencv-glib/cascade-classifier-error.h>
 #include <opencv-glib/color.h>
 #include <opencv-glib/enums.h>
 #include <opencv-glib/image.h>

@@ -5,7 +5,7 @@ G_BEGIN_DECLS
 /**
  * SECTION: image-error
  * @title: GCVImageError
- * @short_description: Image Error
+ * @short_description: Image error
  *
  * #GCVImageError provides error codes for image related error.
  */
