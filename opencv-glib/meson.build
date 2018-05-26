@@ -4,6 +4,7 @@ sources = files(
   'image.cpp',
   'image-error.cpp',
   'matrix.cpp',
+  'rectangle.cpp',
   'video-capture.cpp',
 )
 
@@ -15,6 +16,7 @@ c_headers = files(
   'image-error.h',
   'matrix.h',
   'opencv-glib.h',
+  'rectangle.h',
   'video-capture.h',
 )
 
@@ -23,6 +25,7 @@ cpp_headers = files(
   'image.hpp',
   'matrix.hpp',
   'opencv-glib.hpp',
+  'rectangle.hpp',
   'video-capture.hpp',
 )
 

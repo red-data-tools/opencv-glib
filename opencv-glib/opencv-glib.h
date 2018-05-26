@@ -7,4 +7,5 @@
 #include <opencv-glib/image.h>
 #include <opencv-glib/image-error.h>
 #include <opencv-glib/matrix.h>
+#include <opencv-glib/rectangle.h>
 #include <opencv-glib/video-capture.h>
