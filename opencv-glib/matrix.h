@@ -17,6 +17,7 @@ struct _GCVMatrixClass
 
 GCVMatrix *gcv_matrix_new(void);
 gboolean gcv_matrix_is_empty(GCVMatrix *matrix);
+GCVMatrix *gcv_matrix_clone(GCVMatrix *matrix);
 GBytes *gcv_matrix_get_bytes(GCVMatrix *matrix);
 gsize gcv_matrix_get_element_size(GCVMatrix *matrix);
 gsize gcv_matrix_get_channel_size(GCVMatrix *matrix);

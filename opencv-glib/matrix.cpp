@@ -110,6 +110,26 @@ gcv_matrix_is_empty(GCVMatrix *matrix)
 }
 
 /**
+ * gcv_matrix_clone:
+ * @matrix: A #GCVMatrix
+ *
+ * Returns: (transfer full): A cloned #GCVMatrix. Data is also copied.
+ *
+ * Since: 1.0.0
+ */
+GCVMatrix *
+gcv_matrix_clone(GCVMatrix *matrix)
+{
+  auto cv_matrix = gcv_matrix_get_raw(matrix);
+  auto cv_cloned_matrix_raw = cv_matrix->clone();
+  auto cv_cloned_matrix = std::make_shared<cv::Mat>(cv_cloned_matrix_raw);
+  auto cloned_matrix = g_object_new(G_OBJECT_TYPE(matrix),
+                                    "matrix", &cv_cloned_matrix,
+                                    NULL);
+  return GCV_MATRIX(cloned_matrix);
+}
+
+/**
  * gcv_matrix_get_bytes:
  * @matrix: A #GCVMatrix
  *
