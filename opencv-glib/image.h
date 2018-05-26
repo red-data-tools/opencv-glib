@@ -2,6 +2,7 @@
 
 #include <opencv-glib/color.h>
 #include <opencv-glib/matrix.h>
+#include <opencv-glib/rectangle.h>
 
 G_BEGIN_DECLS
 
@@ -76,5 +77,8 @@ gboolean gcv_image_write(GCVImage *image,
 
 GCVImage *gcv_image_convert_color(GCVImage *image,
                                   GCVColorConversionCode code);
+void gcv_image_draw_rectangle(GCVImage *image,
+                              GCVRectangle *rectangle,
+                              GCVColor *color);
 
 G_END_DECLS

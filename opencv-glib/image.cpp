@@ -1,6 +1,8 @@
+#include <opencv-glib/color.hpp>
 #include <opencv-glib/enums.h>
 #include <opencv-glib/image.hpp>
 #include <opencv-glib/image-error.h>
+#include <opencv-glib/rectangle.hpp>
 
 #include <opencv2/imgproc.hpp>
 
@@ -119,6 +121,29 @@ gcv_image_convert_color(GCVImage *image,
                *cv_converted_image,
                static_cast<int>(code));
   return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_draw_rectangle:
+ * @image: A #GCVImage.
+ * @rectangle: A #GCVRectangle to specify area.
+ * @color: A #GCVColor to specify line color.
+ *
+ * It draws a rectangle to @rectangle area with @color color.
+ *
+ * Since: 1.0.0
+ */
+void
+gcv_image_draw_rectangle(GCVImage *image,
+                         GCVRectangle *rectangle,
+                         GCVColor *color)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
+  auto cv_color = gcv_color_get_raw(color);
+  cv::rectangle(*cv_image,
+                *cv_rectangle,
+                *cv_color);
 }
 
 G_END_DECLS

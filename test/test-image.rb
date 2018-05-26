@@ -71,5 +71,15 @@ class TestImage < Test::Unit::TestCase
                      bgra.bytes.to_s)
       end
     end
+
+    sub_test_case("#rectangle") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_rectangle(CV::Rectangle.new(15, 20, 5, 10),
+                              CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
   end
 end
