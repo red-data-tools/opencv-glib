@@ -458,4 +458,36 @@ typedef enum {
   GCV_COLOR_CONVERSION_CODE_BayerGR2RGB_EA  = GCV_COLOR_CONVERSION_CODE_BayerGB2BGR_EA,
 } GCVColorConversionCode;
 
+
+#define GCV_TYPE_COLOR (gcv_color_get_type())
+G_DECLARE_DERIVABLE_TYPE(GCVColor,
+                         gcv_color,
+                         GCV,
+                         COLOR,
+                         GObject)
+struct _GCVColorClass
+{
+  GObjectClass parent_class;
+};
+
+GCVColor *gcv_color_new_brightness(gdouble brightness);
+GCVColor *gcv_color_new_color(gdouble pixel0,
+                              gdouble pixel1,
+                              gdouble pixel2);
+GCVColor *gcv_color_new_color_alpha(gdouble pixel0,
+                                    gdouble pixel1,
+                                    gdouble pixel2,
+                                    gdouble alpha);
+
+gdouble gcv_color_get_brightness(GCVColor *color);
+void gcv_color_set_brightness(GCVColor *color, gdouble brightness);
+gdouble gcv_color_get_pixel0(GCVColor *color);
+void gcv_color_set_pixel0(GCVColor *color, gdouble pixel0);
+gdouble gcv_color_get_pixel1(GCVColor *color);
+void gcv_color_set_pixel1(GCVColor *color, gdouble pixel1);
+gdouble gcv_color_get_pixel2(GCVColor *color);
+void gcv_color_set_pixel2(GCVColor *color, gdouble pixel2);
+gdouble gcv_color_get_alpha(GCVColor *color);
+void gcv_color_set_alpha(GCVColor *color, gdouble alpha);
+
 G_END_DECLS

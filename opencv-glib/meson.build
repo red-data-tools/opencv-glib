@@ -1,6 +1,7 @@
 sources = files(
   'camera.cpp',
   'camera-error.cpp',
+  'color.cpp',
   'image.cpp',
   'image-error.cpp',
   'matrix.cpp',
@@ -22,6 +23,7 @@ c_headers = files(
 
 cpp_headers = files(
   'camera.hpp',
+  'color.hpp',
   'image.hpp',
   'matrix.hpp',
   'opencv-glib.hpp',

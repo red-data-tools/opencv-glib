@@ -74,7 +74,7 @@ gcv_rectangle_class_init(GCVRectangleClass *klass)
 
   spec = g_param_spec_pointer("rectangle",
                               "Rectangle",
-                              "The raw std::shared<cv::Mat> *",
+                              "The raw std::shared<cv::Rect> *",
                               static_cast<GParamFlags>(G_PARAM_WRITABLE |
                                                        G_PARAM_CONSTRUCT_ONLY));
   g_object_class_install_property(gobject_class, PROP_RECTANGLE, spec);
@@ -87,7 +87,7 @@ gcv_rectangle_class_init(GCVRectangleClass *klass)
  * @width: A width of the new rectangle
  * @height: A height of the new rectangle
  *
- * Returns: A newly created empty #GCVRectangle.
+ * Returns: A newly created #GCVRectangle.
  *
  * Since: 1.0.0
  */
