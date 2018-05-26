@@ -1,0 +1,27 @@
+notifications:
+  email:
+    recipients:
+      - red-data-tools@ml.commit-email.info
+
+dist: trusty
+
+sudo: required
+
+services:
+  - docker
+
+matrix:
+  include:
+    - env: TYPE=ubuntu-18.04
+
+install:
+  - docker build
+      -t red-data-tools/opencv-glib-${TYPE}
+      -f travis/Dockerfile.${TYPE}
+      .
+
+script:
+  - docker run
+      --interactive
+      --tty
+      red-data-tools/opencv-glib-${TYPE}
