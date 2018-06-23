@@ -25,3 +25,25 @@ endif
 
 run_test = find_program('test/run-test.sh')
 test('unit test', run_test)
+
+tag_message = '@0@ @1@ has been released!!!'.format(meson.project_name(),
+						    meson.project_version())
+tag = custom_target('tag',
+                    command: [
+                      'git',
+                      'tag',
+                      '-a',
+                      '-m', tag_message,
+                      meson.project_version(),
+                    ],
+                    output: ['tag'])
+
+tag_push = custom_target('tag-push',
+                         command: ['git', 'push', '--tags'],
+                         depends: [tag],
+                         output: ['tag-push'])
+
+custom_target('release',
+              command: ['echo', tag_message],
+              depends: [tag_push],
+              output: ['release'])
