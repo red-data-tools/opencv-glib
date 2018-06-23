@@ -101,7 +101,7 @@ You can build and install OpenCV GLib after you install them:
 
 ```console
 % mkdir -p build
-% meson build -Denable_gtk_doc=true
+% meson build -Dgtk_doc=true
 % (cd build && ninja)
 % (cd build && sudo ninja install)
 ```
