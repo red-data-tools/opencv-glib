@@ -8,7 +8,7 @@ G_BEGIN_DECLS
  * @title: Video capture class
  * @include: opencv-glib/opencv-glib.h
  *
- * #GCVVideoImage is a class for reading images from video.
+ * #GCVVideoCapture is a class for reading images from video.
  *
  * Since: 1.0.0
  */
