@@ -24,7 +24,6 @@ doc_path = join_paths(data_dir, meson.project_name(), 'gtk-doc', 'html')
 
 source_directories = [
   join_paths(meson.source_root(), 'opencv-glib'),
-  join_paths(meson.build_root(), 'opencv-glib'),
 ]
 dependencies = [
   libopencv_glib_dependency,
