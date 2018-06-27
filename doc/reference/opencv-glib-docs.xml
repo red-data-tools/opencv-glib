@@ -20,13 +20,28 @@
 
   <chapter id="data">
     <title>Data</title>
-    <xi:include href="xml/matrix.xml"/>
+    <xi:include href="xml/color.xml"/>
     <xi:include href="xml/image.xml"/>
+    <xi:include href="xml/matrix.xml"/>
+    <xi:include href="xml/rectangle.xml"/>
   </chapter>
 
-  <chapter id="misc">
-    <title>Misc</title>
-    <xi:include href="xml/error.xml"/>
+  <chapter id="video">
+    <title>Video</title>
+    <xi:include href="xml/camera.xml"/>
+    <xi:include href="xml/video-capture.xml"/>
+  </chapter>
+
+  <chapter id="classifier">
+    <title>Classifier</title>
+    <xi:include href="xml/cascade-classifier.xml"/>
+  </chapter>
+
+  <chapter id="error">
+    <title>Errors</title>
+    <xi:include href="xml/camera-error.xml"/>
+    <xi:include href="xml/cascade-classifier-error.xml"/>
+    <xi:include href="xml/image-error.xml"/>
   </chapter>
 
   <chapter id="object-tree">
