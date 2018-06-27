@@ -217,7 +217,7 @@ gcv_rectangle_get_height(GCVRectangle *rectangle)
 /**
  * gcv_rectangle_set_height:
  * @rectangle: A #GCVRectangle
- * @width: A new height of the rectangle.
+ * @height: A new height of the rectangle.
  *
  * Since: 1.0.0
  */
