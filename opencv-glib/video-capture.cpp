@@ -83,6 +83,7 @@ gcv_video_capture_class_init(GCVVideoCaptureClass *klass)
 
 /**
  * gcv_video_capture_read:
+ * @capture: A #GCVVideoCapture
  *
  * It reads an image from the video capture. If no image is left, it
  * returns NULL.
