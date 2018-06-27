@@ -15,7 +15,7 @@ struct _GCVCascadeClassifierClass
   GObjectClass parent_class;
 };
 
-GCVCascadeClassifier *gcv_cascade_classifier_new(const gchar *path,
+GCVCascadeClassifier *gcv_cascade_classifier_new(const gchar *filename,
                                                  GError **error);
 
 GList *
