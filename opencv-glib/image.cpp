@@ -18,6 +18,192 @@ G_BEGIN_DECLS
  * Since: 1.0.0
  */
 
+typedef struct {
+  gint thickness;
+  GCVLineTypes line_type;
+  gint shift;
+} GCVDrawingOptionsPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
+
+#define GCV_DRAWING_OPTIONS_GET_PRIVATE(obj)              \
+  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                     \
+                               GCV_TYPE_DRAWING_OPTIONS,  \
+                               GCVDrawingOptionsPrivate))
+
+enum {
+  PROP_0,
+  PROP_THICKNESS,
+  PROP_LINE_TYPE,
+  PROP_SHIFT
+};
+
+static void
+gcv_drawing_options_finalize(GObject *object)
+{
+  G_OBJECT_CLASS(gcv_drawing_options_parent_class)->finalize(object);
+}
+
+static void
+gcv_drawing_options_get_property(GObject *object,
+                                 guint prop_id,
+                                 GValue *value,
+                                 GParamSpec *pspec)
+{
+  auto priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(object);
+
+  switch (prop_id) {
+  case PROP_THICKNESS:
+    g_value_set_int(value, priv->thickness);
+    break;
+  case PROP_LINE_TYPE:
+    g_value_set_enum(value, priv->line_type);
+    break;
+  case PROP_SHIFT:
+    g_value_set_int(value, priv->shift);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    break;
+  }
+}
+
+static void
+gcv_drawing_options_set_property(GObject *object,
+                                 guint prop_id,
+                                 const GValue *value,
+                                 GParamSpec *pspec)
+{
+  auto priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(object);
+
+  switch (prop_id) {
+  case PROP_THICKNESS:
+    priv->thickness = g_value_get_int(value);
+    break;
+  case PROP_LINE_TYPE:
+    priv->line_type = static_cast<GCVLineTypes>(g_value_get_enum(value));
+    break;
+  case PROP_SHIFT:
+    priv->shift = g_value_get_int(value);
+    break;
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    break;
+  }
+}
+
+static void
+gcv_drawing_options_init(GCVDrawingOptions *object)
+{
+}
+
+static void
+gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
+{
+  GParamSpec* spec;
+
+  auto gobject_class = G_OBJECT_CLASS(klass);
+
+  gobject_class->finalize = gcv_drawing_options_finalize;
+  gobject_class->get_property = gcv_drawing_options_get_property;
+  gobject_class->set_property = gcv_drawing_options_set_property;
+
+  spec = g_param_spec_int("thickness",
+                          "Thickness",
+                          "thickness of line",
+                          0, G_MAXINT, 1,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_THICKNESS, spec);
+  spec = g_param_spec_enum("line-type",
+                           "Line type",
+                           "line type",
+                           GCV_TYPE_LINE_TYPES,
+                           GCV_LINE_TYPE_LINE_8,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                    G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_LINE_TYPE, spec);
+  spec = g_param_spec_int("shift",
+                          "Shift",
+                          "Number of fractional bits in the point coordinates",
+                          0, G_MAXINT, 0,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_SHIFT, spec);
+}
+
+GCVDrawingOptions *
+gcv_drawing_options_new(gint thickness,
+                        GCVLineTypes line_type,
+                        gint shift)
+{
+  return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS,
+                                          "thickness", thickness,
+                                          "line-type", line_type,
+                                          "shift", shift,
+                                          NULL));
+}
+
+GCVDrawingOptions *
+gcv_drawing_options_new_empty(void)
+{
+  return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS, NULL));
+}
+
+gint
+gcv_drawing_options_get_thickness(GCVDrawingOptions* drawing_options)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, G_TYPE_INT);
+  g_object_get_property(G_OBJECT(drawing_options), "thickness", &val);
+  return g_value_get_int(&val);
+}
+
+void
+gcv_drawing_options_set_thickness(GCVDrawingOptions* drawing_options, gint thickness)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, G_TYPE_INT);
+  g_value_set_int(&val, thickness);
+  g_object_set_property(G_OBJECT(drawing_options), "thickness", &val);
+}
+
+GCVLineTypes
+gcv_drawing_options_get_line_type(GCVDrawingOptions* drawing_options)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, GCV_TYPE_LINE_TYPES);
+  g_object_get_property(G_OBJECT(drawing_options), "line-type", &val);
+  return static_cast<GCVLineTypes>(g_value_get_enum(&val));
+}
+
+void
+gcv_drawing_options_set_line_type(GCVDrawingOptions* drawing_options, GCVLineTypes line_type)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, GCV_TYPE_LINE_TYPES);
+  g_value_set_enum(&val, line_type);
+  g_object_set_property(G_OBJECT(drawing_options), "line-type", &val);
+}
+
+gint
+gcv_drawing_options_get_shift(GCVDrawingOptions* drawing_options)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, G_TYPE_INT);
+  g_object_get_property(G_OBJECT(drawing_options), "shift", &val);
+  return g_value_get_int(&val);
+}
+
+void
+gcv_drawing_options_set_shift(GCVDrawingOptions* drawing_options, gint shift)
+{
+  GValue val = G_VALUE_INIT;
+  g_value_init(&val, G_TYPE_INT);
+  g_value_set_int(&val, shift);
+  g_object_set_property(G_OBJECT(drawing_options), "shift", &val);
+}
+
 G_DEFINE_TYPE(GCVImage, gcv_image, GCV_TYPE_MATRIX)
 
 static void
@@ -128,22 +314,33 @@ gcv_image_convert_color(GCVImage *image,
  * @image: A #GCVImage.
  * @rectangle: A #GCVRectangle to specify area.
  * @color: A #GCVColor to specify line color.
+ * @drawing_options: A #GCVDrawingOptions to specify optional parameters.
  *
- * It draws a rectangle to @rectangle area with @color color.
+ * It draws a rectangle to @rectangle area with @color color and @drawing_options options.
  *
  * Since: 1.0.0
  */
 void
 gcv_image_draw_rectangle(GCVImage *image,
                          GCVRectangle *rectangle,
-                         GCVColor *color)
+                         GCVColor *color,
+                         GCVDrawingOptions *drawing_options)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
   auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
   auto cv_color = gcv_color_get_raw(color);
-  cv::rectangle(*cv_image,
-                *cv_rectangle,
-                *cv_color);
+  if (drawing_options) {
+    cv::rectangle(*cv_image,
+                  *cv_rectangle,
+                  *cv_color,
+                  gcv_drawing_options_get_thickness(drawing_options),
+                  gcv_drawing_options_get_line_type(drawing_options),
+                  gcv_drawing_options_get_shift(drawing_options));
+  } else {
+    cv::rectangle(*cv_image,
+                  *cv_rectangle,
+                  *cv_color);
+  }
 }
 
 G_END_DECLS
