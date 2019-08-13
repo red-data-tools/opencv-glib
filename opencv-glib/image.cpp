@@ -88,7 +88,7 @@ gcv_image_write(GCVImage *image,
                   "Failed to write image: %s", filename);
       return FALSE;
     }
-  } catch (cv::Exception exception) {
+  } catch (const cv::Exception &exception) {
     g_set_error(error,
                 GCV_IMAGE_ERROR,
                 GCV_IMAGE_ERROR_WRITE,
