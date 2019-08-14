@@ -131,6 +131,13 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
   g_object_class_install_property(gobject_class, PROP_SHIFT, spec);
 }
 
+/**
+ * gcv_drawing_options_new:
+ *
+ * Returns a newly created #GCVDrawingOptions.
+ *
+ * Since: 1.0.1
+ */
 GCVDrawingOptions *
 gcv_drawing_options_new(void)
 {

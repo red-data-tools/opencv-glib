@@ -21,7 +21,7 @@ G_BEGIN_DECLS
  * But we can link to a specific version:
  * [OpenCV 3.4.1's `cv::LineTypes`](https://docs.opencv.org/3.4.1/d0/de1/group__core.html#gaf076ef45de481ac96e0ab3dc2c29a777).
  *
- * Since 1.0.0
+ * Since 1.0.1
  */
 typedef enum {
   GCV_LINE_TYPE_FILLED = -1,
