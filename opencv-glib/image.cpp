@@ -110,14 +110,14 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
 
   spec = g_param_spec_int("thickness",
                           "Thickness",
-                          "thickness of line",
+                          "The thickness of line to be drawn",
                           0, G_MAXINT, 1,
                           static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_THICKNESS, spec);
   spec = g_param_spec_enum("line-type",
                            "Line type",
-                           "line type",
+                           "The type of line to be drawn",
                            GCV_TYPE_LINE_TYPES,
                            GCV_LINE_TYPE_LINE_8,
                            static_cast<GParamFlags>(G_PARAM_READWRITE |
@@ -125,7 +125,7 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
   g_object_class_install_property(gobject_class, PROP_LINE_TYPE, spec);
   spec = g_param_spec_int("shift",
                           "Shift",
-                          "Number of fractional bits in the point coordinates",
+                          "The number of fractional bits in the point coordinates",
                           0, G_MAXINT, 0,
                           static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT));
