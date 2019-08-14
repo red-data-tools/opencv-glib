@@ -149,60 +149,6 @@ gcv_drawing_options_new_empty(void)
   return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS, NULL));
 }
 
-gint
-gcv_drawing_options_get_thickness(GCVDrawingOptions* drawing_options)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, G_TYPE_INT);
-  g_object_get_property(G_OBJECT(drawing_options), "thickness", &val);
-  return g_value_get_int(&val);
-}
-
-void
-gcv_drawing_options_set_thickness(GCVDrawingOptions* drawing_options, gint thickness)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, G_TYPE_INT);
-  g_value_set_int(&val, thickness);
-  g_object_set_property(G_OBJECT(drawing_options), "thickness", &val);
-}
-
-GCVLineTypes
-gcv_drawing_options_get_line_type(GCVDrawingOptions* drawing_options)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, GCV_TYPE_LINE_TYPES);
-  g_object_get_property(G_OBJECT(drawing_options), "line-type", &val);
-  return static_cast<GCVLineTypes>(g_value_get_enum(&val));
-}
-
-void
-gcv_drawing_options_set_line_type(GCVDrawingOptions* drawing_options, GCVLineTypes line_type)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, GCV_TYPE_LINE_TYPES);
-  g_value_set_enum(&val, line_type);
-  g_object_set_property(G_OBJECT(drawing_options), "line-type", &val);
-}
-
-gint
-gcv_drawing_options_get_shift(GCVDrawingOptions* drawing_options)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, G_TYPE_INT);
-  g_object_get_property(G_OBJECT(drawing_options), "shift", &val);
-  return g_value_get_int(&val);
-}
-
-void
-gcv_drawing_options_set_shift(GCVDrawingOptions* drawing_options, gint shift)
-{
-  GValue val = G_VALUE_INIT;
-  g_value_init(&val, G_TYPE_INT);
-  g_value_set_int(&val, shift);
-  g_object_set_property(G_OBJECT(drawing_options), "shift", &val);
-}
-
 G_DEFINE_TYPE(GCVImage, gcv_image, GCV_TYPE_MATRIX)
 
 static void
@@ -329,12 +275,13 @@ gcv_image_draw_rectangle(GCVImage *image,
   auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
   auto cv_color = gcv_color_get_raw(color);
   if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
     cv::rectangle(*cv_image,
                   *cv_rectangle,
                   *cv_color,
-                  gcv_drawing_options_get_thickness(drawing_options),
-                  gcv_drawing_options_get_line_type(drawing_options),
-                  gcv_drawing_options_get_shift(drawing_options));
+                  options_priv->thickness,
+                  options_priv->line_type,
+                  options_priv->shift);
   } else {
     cv::rectangle(*cv_image,
                   *cv_rectangle,

@@ -47,13 +47,6 @@ GCVDrawingOptions *gcv_drawing_options_new(gint thickness,
                                            gint shift);
 GCVDrawingOptions *gcv_drawing_options_new_empty(void);
 
-gint gcv_drawing_options_get_thickness(GCVDrawingOptions* drawing_options);
-void gcv_drawing_options_set_thickness(GCVDrawingOptions* drawing_options, gint thickness);
-GCVLineTypes gcv_drawing_options_get_line_type(GCVDrawingOptions* drawing_options);
-void gcv_drawing_options_set_line_type(GCVDrawingOptions* drawing_options, GCVLineTypes line_type);
-gint gcv_drawing_options_get_shift(GCVDrawingOptions* drawing_options);
-void gcv_drawing_options_set_shift(GCVDrawingOptions* drawing_options, gint shift);
-
 /**
  * GCVImageReadFlags:
  * @GCV_IMAGE_READ_FLAG_UNCHANGED: See `cv::IMREAD_UNCHANGED`.
