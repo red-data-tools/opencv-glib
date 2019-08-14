@@ -132,19 +132,7 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
 }
 
 GCVDrawingOptions *
-gcv_drawing_options_new(gint thickness,
-                        GCVLineTypes line_type,
-                        gint shift)
-{
-  return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS,
-                                          "thickness", thickness,
-                                          "line-type", line_type,
-                                          "shift", shift,
-                                          NULL));
-}
-
-GCVDrawingOptions *
-gcv_drawing_options_new_empty(void)
+gcv_drawing_options_new(void)
 {
   return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS, NULL));
 }

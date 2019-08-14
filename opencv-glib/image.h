@@ -42,10 +42,7 @@ struct _GCVDrawingOptionsClass
   GObjectClass parent_class;
 };
 
-GCVDrawingOptions *gcv_drawing_options_new(gint thickness,
-                                           GCVLineTypes line_type,
-                                           gint shift);
-GCVDrawingOptions *gcv_drawing_options_new_empty(void);
+GCVDrawingOptions *gcv_drawing_options_new(void);
 
 /**
  * GCVImageReadFlags:
