@@ -20,7 +20,7 @@ G_BEGIN_DECLS
 
 typedef struct {
   gint thickness;
-  GCVLineTypes line_type;
+  GCVLineType line_type;
   gint shift;
 } GCVDrawingOptionsPrivate;
 
@@ -80,7 +80,7 @@ gcv_drawing_options_set_property(GObject *object,
     priv->thickness = g_value_get_int(value);
     break;
   case PROP_LINE_TYPE:
-    priv->line_type = static_cast<GCVLineTypes>(g_value_get_enum(value));
+    priv->line_type = static_cast<GCVLineType>(g_value_get_enum(value));
     break;
   case PROP_SHIFT:
     priv->shift = g_value_get_int(value);
@@ -117,7 +117,7 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
   spec = g_param_spec_enum("line-type",
                            "Line type",
                            "The type of line to be drawn",
-                           GCV_TYPE_LINE_TYPES,
+                           GCV_TYPE_LINE_TYPE,
                            GCV_LINE_TYPE_LINE_8,
                            static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                     G_PARAM_CONSTRUCT));
