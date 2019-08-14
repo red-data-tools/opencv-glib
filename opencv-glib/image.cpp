@@ -38,12 +38,6 @@ enum {
 };
 
 static void
-gcv_drawing_options_finalize(GObject *object)
-{
-  G_OBJECT_CLASS(gcv_drawing_options_parent_class)->finalize(object);
-}
-
-static void
 gcv_drawing_options_get_property(GObject *object,
                                  guint prop_id,
                                  GValue *value,
@@ -103,7 +97,6 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
 
   auto gobject_class = G_OBJECT_CLASS(klass);
 
-  gobject_class->finalize = gcv_drawing_options_finalize;
   gobject_class->get_property = gcv_drawing_options_get_property;
   gobject_class->set_property = gcv_drawing_options_set_property;
 
