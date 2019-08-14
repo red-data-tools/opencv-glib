@@ -247,7 +247,7 @@ gcv_image_convert_color(GCVImage *image,
  * @image: A #GCVImage.
  * @rectangle: A #GCVRectangle to specify area.
  * @color: A #GCVColor to specify line color.
- * @drawing_options: A #GCVDrawingOptions to specify optional parameters.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
  *
  * It draws a rectangle to @rectangle area with @color color and @drawing_options options.
  *
