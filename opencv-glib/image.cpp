@@ -32,8 +32,7 @@ G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT
                                GCVDrawingOptionsPrivate))
 
 enum {
-  PROP_0,
-  PROP_THICKNESS,
+  PROP_THICKNESS = 1,
   PROP_LINE_TYPE,
   PROP_SHIFT
 };
