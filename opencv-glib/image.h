@@ -7,6 +7,44 @@
 G_BEGIN_DECLS
 
 /**
+ * GCVLineType:
+ * @GCV_LINE_TYPE_FILLED: See `cv::LineTypes::FILLED`.
+ * @GCV_LINE_TYPE_LINE_4: See `cv::LineTypes::LINE_4`.
+ * @GCV_LINE_TYPE_LINE_8: See `cv::LineTypes::LINE_8`.
+ * @GCV_LINE_TYPE_LINE_AA: See `cv::LineTypes::LINE_AA`.
+ *
+ * Line type for drawing functions corresponding to `cv::LineTypes`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::LineTypes` document.
+ * But we can link to a specific version:
+ * [OpenCV 3.4.1's `cv::LineTypes`](https://docs.opencv.org/3.4.1/d0/de1/group__core.html#gaf076ef45de481ac96e0ab3dc2c29a777).
+ *
+ * Since 1.0.1
+ */
+typedef enum {
+  GCV_LINE_TYPE_FILLED = -1,
+  GCV_LINE_TYPE_LINE_4 = 4,
+  GCV_LINE_TYPE_LINE_8 = 8,
+  GCV_LINE_TYPE_LINE_AA = 16
+} GCVLineType;
+
+#define GCV_TYPE_DRAWING_OPTIONS (gcv_drawing_options_get_type())
+G_DECLARE_DERIVABLE_TYPE(GCVDrawingOptions,
+                         gcv_drawing_options,
+                         GCV,
+                         DRAWING_OPTIONS,
+                         GObject)
+
+struct _GCVDrawingOptionsClass
+{
+  GObjectClass parent_class;
+};
+
+GCVDrawingOptions *gcv_drawing_options_new(void);
+
+/**
  * GCVImageReadFlags:
  * @GCV_IMAGE_READ_FLAG_UNCHANGED: See `cv::IMREAD_UNCHANGED`.
  * @GCV_IMAGE_READ_FLAG_GRAYSCALE: See `cv::IMREAD_GREAYSCALE`.
@@ -79,6 +117,7 @@ GCVImage *gcv_image_convert_color(GCVImage *image,
                                   GCVColorConversionCode code);
 void gcv_image_draw_rectangle(GCVImage *image,
                               GCVRectangle *rectangle,
-                              GCVColor *color);
+                              GCVColor *color,
+                              GCVDrawingOptions *drawing_options);
 
 G_END_DECLS

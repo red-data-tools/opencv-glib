@@ -80,6 +80,22 @@ class TestImage < Test::Unit::TestCase
         assert_not_equal(cloned_image.bytes.to_s,
                          @image.bytes.to_s)
       end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        rect = CV::Rectangle.new(15, 20, 5, 10)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.shift = 2
+        cloned_image.draw_rectangle(rect, color) # draw without options
+        @image.draw_rectangle(rect,
+                              color,
+                              drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
     end
   end
 end
