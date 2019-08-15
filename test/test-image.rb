@@ -87,7 +87,7 @@ class TestImage < Test::Unit::TestCase
         color = CV::Color.new(255, 127, 0, 2)
         drawing_options = CV::DrawingOptions.new
         drawing_options.thickness = 5
-        drawing_options.line_type = CV::LineType::LINE_AA
+        drawing_options.line_type = :line_aa
         drawing_options.shift = 2
         cloned_image.draw_rectangle(rect, color) # draw without options
         @image.draw_rectangle(rect,
