@@ -93,7 +93,7 @@ gcv_drawing_options_init(GCVDrawingOptions *object)
 static void
 gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
 {
-  GParamSpec* spec;
+  GParamSpec *spec;
 
   auto gobject_class = G_OBJECT_CLASS(klass);
 
