@@ -100,6 +100,35 @@ class TestImage < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("#line") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_line(CV::Point.new(10, 10),
+                         CV::Point.new(30, 20),
+                         CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point1 = CV::Point.new(10, 10)
+        point2 = CV::Point.new(30, 20)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.shift = 2
+        cloned_image.draw_line(point1, point2, color) # draw without options
+        @image.draw_line(point1,
+                         point2,
+                         color,
+                         drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
     sub_test_case("#rectangle") do
       def test_simple
         cloned_image = @image.clone

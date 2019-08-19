@@ -283,6 +283,46 @@ gcv_image_draw_circle(GCVImage *image,
 }
 
 /**
+ * gcv_image_draw_line:
+ * @image: A #GCVImage.
+ * @point1: A #GCVPoint to specify the first point of the line segment.
+ * @point2: A #GCVPoint to specify the second point of the line segment.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a line segment between @point1 and @point2 with @color color and @drawing_options options.
+ *
+ * Since: 1.0.1
+ */
+void
+gcv_image_draw_line(GCVImage *image,
+                    GCVPoint *point1,
+                    GCVPoint *point2,
+                    GCVColor *color,
+                    GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_point1 = gcv_point_get_raw(point1);
+  auto cv_point2 = gcv_point_get_raw(point2);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::line(*cv_image,
+             *cv_point1,
+             *cv_point2,
+             *cv_color,
+             options_priv->thickness,
+             options_priv->line_type,
+             options_priv->shift);
+  } else {
+    cv::line(*cv_image,
+             *cv_point1,
+             *cv_point2,
+             *cv_color);
+  }
+}
+
+/**
  * gcv_image_draw_rectangle:
  * @image: A #GCVImage.
  * @rectangle: A #GCVRectangle to specify area.

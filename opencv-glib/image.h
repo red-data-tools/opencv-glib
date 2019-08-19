@@ -121,6 +121,11 @@ void gcv_image_draw_circle(GCVImage *image,
                            gint radius,
                            GCVColor *color,
                            GCVDrawingOptions *drawing_options);
+void gcv_image_draw_line(GCVImage *image,
+                         GCVPoint *point1,
+                         GCVPoint *point2,
+                         GCVColor *color,
+                         GCVDrawingOptions *drawing_options);
 void gcv_image_draw_rectangle(GCVImage *image,
                               GCVRectangle *rectangle,
                               GCVColor *color,
