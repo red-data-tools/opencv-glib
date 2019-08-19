@@ -72,6 +72,34 @@ class TestImage < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("#circle") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_circle(CV::Point.new(16, 16),
+                           10,
+                           CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point = CV::Point.new(16, 16)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.shift = 2
+        cloned_image.draw_circle(point, 10, color) # draw without options
+        @image.draw_circle(point,
+                           10,
+                           color,
+                           drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
     sub_test_case("#rectangle") do
       def test_simple
         cloned_image = @image.clone

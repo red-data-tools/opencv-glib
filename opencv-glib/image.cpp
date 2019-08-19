@@ -2,6 +2,7 @@
 #include <opencv-glib/enums.h>
 #include <opencv-glib/image.hpp>
 #include <opencv-glib/image-error.h>
+#include <opencv-glib/point.hpp>
 #include <opencv-glib/rectangle.hpp>
 
 #include <opencv2/imgproc.hpp>
@@ -240,6 +241,45 @@ gcv_image_convert_color(GCVImage *image,
                *cv_converted_image,
                static_cast<int>(code));
   return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_draw_circle:
+ * @image: A #GCVImage.
+ * @center: A #GCVPoint to specify center.
+ * @radius: The radius of the circle.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a circle with a given @center point, @radius, @color color and @drawing_options options.
+ *
+ * Since: 1.0.1
+ */
+void
+gcv_image_draw_circle(GCVImage *image,
+                      GCVPoint *center,
+                      gint radius,
+                      GCVColor *color,
+                      GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_center = gcv_point_get_raw(center);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::circle(*cv_image,
+               *cv_center,
+               radius,
+               *cv_color,
+               options_priv->thickness,
+               options_priv->line_type,
+               options_priv->shift);
+  } else {
+    cv::circle(*cv_image,
+               *cv_center,
+               radius,
+               *cv_color);
+  }
 }
 
 /**
