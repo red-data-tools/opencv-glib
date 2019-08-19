@@ -357,6 +357,46 @@ gcv_image_draw_rectangle(GCVImage *image,
   }
 }
 
+/**
+ * gcv_image_draw_rectangle_points:
+ * @image: A #GCVImage.
+ * @point1: A #GCVPoint to specify the vertex of the rectangle.
+ * @point2: A #GCVPoint to specify the vertex of the rectangle opposite to @point1.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a rectangle whose two opposite corners are @point1 and @point2.
+ *
+ * Since: 1.0.1
+ */
+void
+gcv_image_draw_rectangle_points(GCVImage *image,
+                                GCVPoint *point1,
+                                GCVPoint *point2,
+                                GCVColor *color,
+                                GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_point1 = gcv_point_get_raw(point1);
+  auto cv_point2 = gcv_point_get_raw(point2);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::rectangle(*cv_image,
+                  *cv_point1,
+                  *cv_point2,
+                  *cv_color,
+                  options_priv->thickness,
+                  options_priv->line_type,
+                  options_priv->shift);
+  } else {
+    cv::rectangle(*cv_image,
+                  *cv_point1,
+                  *cv_point2,
+                  *cv_color);
+  }
+}
+
 G_END_DECLS
 
 GCVImage *
