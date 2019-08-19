@@ -9,7 +9,7 @@ G_BEGIN_DECLS
  *
  * #GCVPoint is a point class.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 
 typedef struct {
@@ -86,7 +86,7 @@ gcv_point_class_init(GCVPointClass *klass)
  *
  * Returns: A newly created #GCVPoint.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 GCVPoint *
 gcv_point_new(gint x, gint y)
@@ -100,7 +100,7 @@ gcv_point_new(gint x, gint y)
  *
  * Returns: A newly created empty #GCVPoint.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 GCVPoint *
 gcv_point_new_empty(void)
@@ -115,7 +115,7 @@ gcv_point_new_empty(void)
  *
  * Returns: The X value of the point.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 gint
 gcv_point_get_x(GCVPoint *point)
@@ -129,7 +129,7 @@ gcv_point_get_x(GCVPoint *point)
  * @point: A #GCVPoint
  * @x: A new X value of the point.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 void
 gcv_point_set_x(GCVPoint *point, gint x)
@@ -144,7 +144,7 @@ gcv_point_set_x(GCVPoint *point, gint x)
  *
  * Returns: The Y value of the point.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 gint
 gcv_point_get_y(GCVPoint *point)
@@ -158,7 +158,7 @@ gcv_point_get_y(GCVPoint *point)
  * @point: A #GCVPoint
  * @y: A new Y value of the point.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 void
 gcv_point_set_y(GCVPoint *point, gint y)

@@ -130,7 +130,7 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
  *
  * Returns a newly created #GCVDrawingOptions.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 GCVDrawingOptions *
 gcv_drawing_options_new(void)
@@ -253,7 +253,7 @@ gcv_image_convert_color(GCVImage *image,
  *
  * It draws a circle with a given @center point, @radius, @color color and @drawing_options options.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 void
 gcv_image_draw_circle(GCVImage *image,
@@ -292,7 +292,7 @@ gcv_image_draw_circle(GCVImage *image,
  *
  * It draws a line segment between @point1 and @point2 with @color color and @drawing_options options.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 void
 gcv_image_draw_line(GCVImage *image,
@@ -367,7 +367,7 @@ gcv_image_draw_rectangle(GCVImage *image,
  *
  * It draws a rectangle whose two opposite corners are @point1 and @point2.
  *
- * Since: 1.0.1
+ * Since: 1.0.2
  */
 void
 gcv_image_draw_rectangle_points(GCVImage *image,
