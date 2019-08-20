@@ -23,6 +23,7 @@ typedef struct {
   gint thickness;
   GCVLineType line_type;
   gint shift;
+  gdouble tip_length;
 } GCVDrawingOptionsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
@@ -35,7 +36,8 @@ G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT
 enum {
   PROP_THICKNESS = 1,
   PROP_LINE_TYPE,
-  PROP_SHIFT
+  PROP_SHIFT,
+  PROP_TIP_LENGTH
 };
 
 static void
@@ -55,6 +57,9 @@ gcv_drawing_options_get_property(GObject *object,
     break;
   case PROP_SHIFT:
     g_value_set_int(value, priv->shift);
+    break;
+  case PROP_TIP_LENGTH:
+    g_value_set_double(value, priv->tip_length);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -79,6 +84,9 @@ gcv_drawing_options_set_property(GObject *object,
     break;
   case PROP_SHIFT:
     priv->shift = g_value_get_int(value);
+    break;
+  case PROP_TIP_LENGTH:
+    priv->tip_length = g_value_get_double(value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -123,6 +131,13 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
                           static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_SHIFT, spec);
+  spec = g_param_spec_double("tip-length",
+                             "Tip length",
+                             "The length of the arrow tip in relation to the arrow length",
+                             0, G_MAXDOUBLE, 0.1,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_TIP_LENGTH, spec);
 }
 
 /**
@@ -241,6 +256,47 @@ gcv_image_convert_color(GCVImage *image,
                *cv_converted_image,
                static_cast<int>(code));
   return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_draw_arrowed_line:
+ * @image: A #GCVImage.
+ * @point1: A #GCVPoint to specify the point the arrow starts from.
+ * @point2: A #GCVPoint to specify the point the arrow points to.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a arrow segment pointing from @point1 to @point2
+  *
+ * Since: 1.0.2
+ */
+void
+gcv_image_draw_arrowed_line(GCVImage *image,
+                            GCVPoint *point1,
+                            GCVPoint *point2,
+                            GCVColor *color,
+                            GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_point1 = gcv_point_get_raw(point1);
+  auto cv_point2 = gcv_point_get_raw(point2);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::arrowedLine(*cv_image,
+                    *cv_point1,
+                    *cv_point2,
+                    *cv_color,
+                    options_priv->thickness,
+                    options_priv->line_type,
+                    options_priv->shift,
+                    options_priv->tip_length);
+  } else {
+    cv::arrowedLine(*cv_image,
+                    *cv_point1,
+                    *cv_point2,
+                    *cv_color);
+  }
 }
 
 /**

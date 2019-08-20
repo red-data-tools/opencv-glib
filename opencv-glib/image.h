@@ -116,6 +116,11 @@ gboolean gcv_image_write(GCVImage *image,
 
 GCVImage *gcv_image_convert_color(GCVImage *image,
                                   GCVColorConversionCode code);
+void gcv_image_draw_arrowed_line(GCVImage *image,
+                                 GCVPoint *point1,
+                                 GCVPoint *point2,
+                                 GCVColor *color,
+                                 GCVDrawingOptions *drawing_options);
 void gcv_image_draw_circle(GCVImage *image,
                            GCVPoint *center,
                            gint radius,
