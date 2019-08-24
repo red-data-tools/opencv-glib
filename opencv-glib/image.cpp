@@ -25,6 +25,8 @@ typedef struct {
   gint shift;
   gdouble tip_length;
   gboolean bottom_left_origin;
+  GCVMarkerType marker_type;
+  gint marker_size;
 } GCVDrawingOptionsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
@@ -39,7 +41,9 @@ enum {
   PROP_LINE_TYPE,
   PROP_SHIFT,
   PROP_TIP_LENGTH,
-  PROP_BOTTOM_LEFT_ORIGIN
+  PROP_BOTTOM_LEFT_ORIGIN,
+  PROP_MARKER_TYPE,
+  PROP_MARKER_SIZE
 };
 
 static void
@@ -65,6 +69,12 @@ gcv_drawing_options_get_property(GObject *object,
     break;
   case PROP_BOTTOM_LEFT_ORIGIN:
     g_value_set_boolean(value, priv->bottom_left_origin);
+    break;
+  case PROP_MARKER_TYPE:
+    g_value_set_enum(value, priv->marker_type);
+    break;
+  case PROP_MARKER_SIZE:
+    g_value_set_int(value, priv->marker_size);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -95,6 +105,12 @@ gcv_drawing_options_set_property(GObject *object,
     break;
   case PROP_BOTTOM_LEFT_ORIGIN:
     priv->bottom_left_origin = g_value_get_boolean(value);
+    break;
+  case PROP_MARKER_TYPE:
+    priv->marker_type = static_cast<GCVMarkerType>(g_value_get_enum(value));
+    break;
+  case PROP_MARKER_SIZE:
+    priv->marker_size = g_value_get_int(value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -153,6 +169,21 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
                               static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                        G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_BOTTOM_LEFT_ORIGIN, spec);
+  spec = g_param_spec_enum("marker-type",
+                           "Marker type",
+                           "The type of marker to be drawn",
+                           GCV_TYPE_MARKER_TYPE,
+                           GCV_MARKER_TYPE_CROSS,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                    G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_MARKER_TYPE, spec);
+  spec = g_param_spec_int("marker-size",
+                          "Marker size",
+                          "The length of the marker axis",
+                          0, G_MAXINT, 20,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_MARKER_SIZE, spec);
 }
 
 /**
@@ -350,6 +381,42 @@ gcv_image_draw_circle(GCVImage *image,
                *cv_center,
                radius,
                *cv_color);
+  }
+}
+
+/**
+ * gcv_image_draw_marker:
+ * @image: A #GCVImage.
+ * @position: A #GCVPoint to specify the point where the crosshair is positioned.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a marker on @position with @color color and @drawing_options options.
+ *
+ * Since: 1.0.2
+ */
+void
+gcv_image_draw_marker(GCVImage *image,
+                      GCVPoint *position,
+                      GCVColor *color,
+                      GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_position = gcv_point_get_raw(position);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::drawMarker(*cv_image,
+                   *cv_position,
+                   *cv_color,
+                   options_priv->marker_type,
+                   options_priv->marker_size,
+                   options_priv->thickness,
+                   options_priv->line_type);
+  } else {
+    cv::drawMarker(*cv_image,
+                   *cv_position,
+                   *cv_color);
   }
 }
 

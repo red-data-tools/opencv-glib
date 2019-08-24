@@ -65,6 +65,36 @@ typedef enum {
   GCV_LINE_TYPE_LINE_AA = 16
 } GCVLineType;
 
+/**
+ * GCVMarkerType:
+ * @GCV_MARKER_TYPE_CROSS: See `cv::MarkerTypes::MARKER_CROSS`.
+ * @GCV_MARKER_TYPE_TILTED_CROSS: See `cv::MarkerTypes::MARKER_TILTED_CROSS`.
+ * @GCV_MARKER_TYPE_STAR: See `cv::MarkerTypes::MARKER_STAR`.
+ * @GCV_MARKER_TYPE_DIAMOND: See `cv::MarkerTypes::MARKER_DIAMOND`.
+ * @GCV_MARKER_TYPE_SQUARE: See `cv::MarkerTypes::MARKER_SQUARE`.
+ * @GCV_MARKER_TYPE_TRIANGLE_UP: See `cv::MarkerTypes::MARKER_TRIANGLE_UP`.
+ * @GCV_MARKER_TYPE_TRIANGLE_DOWN: See `cv::MarkerTypes::MARKER_TRIANGLE_DOWN`.
+ *
+ * Line type for drawing functions corresponding to `cv::MarkerTypes`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::MarkerTypes` document.
+ * But we can link to a specific version:
+ * [OpenCV 3.4.1's `cv::MarkerTypes`](https://docs.opencv.org/3.4.1/d6/d6e/group__imgproc__draw.html#ga0ad87faebef1039ec957737ecc633b7b).
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_MARKER_TYPE_CROSS = 0,
+  GCV_MARKER_TYPE_TILTED_CROSS = 1,
+  GCV_MARKER_TYPE_STAR = 2,
+  GCV_MARKER_TYPE_DIAMOND = 3,
+  GCV_MARKER_TYPE_SQUARE = 4,
+  GCV_MARKER_TYPE_TRIANGLE_UP = 5,
+  GCV_MARKER_TYPE_TRIANGLE_DOWN = 6
+} GCVMarkerType;
+
 #define GCV_TYPE_DRAWING_OPTIONS (gcv_drawing_options_get_type())
 G_DECLARE_DERIVABLE_TYPE(GCVDrawingOptions,
                          gcv_drawing_options,
@@ -158,6 +188,10 @@ void gcv_image_draw_arrowed_line(GCVImage *image,
 void gcv_image_draw_circle(GCVImage *image,
                            GCVPoint *center,
                            gint radius,
+                           GCVColor *color,
+                           GCVDrawingOptions *drawing_options);
+void gcv_image_draw_marker(GCVImage *image,
+                           GCVPoint *position,
                            GCVColor *color,
                            GCVDrawingOptions *drawing_options);
 void gcv_image_draw_line(GCVImage *image,
