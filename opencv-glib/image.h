@@ -8,6 +8,40 @@
 G_BEGIN_DECLS
 
 /**
+ * GCVHersheyFont:
+ * @GCV_HERSHEY_FONT_HERSHEY_SIMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SIMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_PLAIN: See `cv::HersheyFonts::FONT_HERSHEY_PLAIN`.
+ * @GCV_HERSHEY_FONT_HERSHEY_DUPLEX: See `cv::HersheyFonts::FONT_HERSHEY_DUPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_COMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_COMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_TRIPLEX: See `cv::HersheyFonts::FONT_HERSHEY_TRIPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_COMPLEX_SMALL: See `cv::HersheyFonts::FONT_HERSHEY_COMPLEX_SMALL`.
+ * @GCV_HERSHEY_FONT_HERSHEY_SCRIPT_SIMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SCRIPT_SIMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_SCRIPT_COMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SCRIPT_COMPLEX`.
+ * @GCV_HERSHEY_FONT_ITALIC: See `cv::HersheyFonts::FONT_ITALIC`.
+ *
+ * Line type for drawing functions corresponding to `cv::HersheyFonts`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::HersheyFonts` document.
+ * But we can link to a specific version:
+ * [OpenCV 3.4.1's `cv::HersheyFonts`](https://docs.opencv.org/3.4.1/d0/de1/group__core.html#ga0f9314ea6e35f99bb23f29567fc16e11).
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_HERSHEY_FONT_HERSHEY_SIMPLEX = 0,
+  GCV_HERSHEY_FONT_HERSHEY_PLAIN = 1,
+  GCV_HERSHEY_FONT_HERSHEY_DUPLEX = 2,
+  GCV_HERSHEY_FONT_HERSHEY_COMPLEX = 3,
+  GCV_HERSHEY_FONT_HERSHEY_TRIPLEX = 4,
+  GCV_HERSHEY_FONT_HERSHEY_COMPLEX_SMALL = 5,
+  GCV_HERSHEY_FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
+  GCV_HERSHEY_FONT_HERSHEY_SCRIPT_COMPLEX = 7,
+  GCV_HERSHEY_FONT_ITALIC = 16
+} GCVHersheyFont;
+
+/**
  * GCVLineType:
  * @GCV_LINE_TYPE_FILLED: See `cv::LineTypes::FILLED`.
  * @GCV_LINE_TYPE_LINE_4: See `cv::LineTypes::LINE_4`.
@@ -131,6 +165,13 @@ void gcv_image_draw_line(GCVImage *image,
                          GCVPoint *point2,
                          GCVColor *color,
                          GCVDrawingOptions *drawing_options);
+void gcv_image_put_text(GCVImage *image,
+                        const gchar *text,
+                        GCVPoint *org,
+                        GCVHersheyFont font_face,
+                        gdouble font_scale,
+                        GCVColor *color,
+                        GCVDrawingOptions *drawing_options);
 void gcv_image_draw_rectangle(GCVImage *image,
                               GCVRectangle *rectangle,
                               GCVColor *color,

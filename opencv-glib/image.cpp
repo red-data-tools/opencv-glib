@@ -24,6 +24,7 @@ typedef struct {
   GCVLineType line_type;
   gint shift;
   gdouble tip_length;
+  gboolean bottom_left_origin;
 } GCVDrawingOptionsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
@@ -37,7 +38,8 @@ enum {
   PROP_THICKNESS = 1,
   PROP_LINE_TYPE,
   PROP_SHIFT,
-  PROP_TIP_LENGTH
+  PROP_TIP_LENGTH,
+  PROP_BOTTOM_LEFT_ORIGIN
 };
 
 static void
@@ -60,6 +62,9 @@ gcv_drawing_options_get_property(GObject *object,
     break;
   case PROP_TIP_LENGTH:
     g_value_set_double(value, priv->tip_length);
+    break;
+  case PROP_BOTTOM_LEFT_ORIGIN:
+    g_value_set_boolean(value, priv->bottom_left_origin);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -87,6 +92,9 @@ gcv_drawing_options_set_property(GObject *object,
     break;
   case PROP_TIP_LENGTH:
     priv->tip_length = g_value_get_double(value);
+    break;
+  case PROP_BOTTOM_LEFT_ORIGIN:
+    priv->bottom_left_origin = g_value_get_boolean(value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -138,6 +146,13 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
                              static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                       G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_TIP_LENGTH, spec);
+  spec = g_param_spec_boolean("bottom-left-origin",
+                              "Bottom left origin",
+                              "When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.",
+                              FALSE,
+                              static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                       G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_BOTTOM_LEFT_ORIGIN, spec);
 }
 
 /**
@@ -375,6 +390,53 @@ gcv_image_draw_line(GCVImage *image,
              *cv_point1,
              *cv_point2,
              *cv_color);
+  }
+}
+
+/**
+ * gcv_image_put_text
+ * @image: A #GCVImage.
+ * @text: The text string to be drawn.
+ * @org: The bottom-left corner of the text string in the image.
+ * @font_face: The font type.
+ * @font_scale: The font scale factor that is multiplied by the font-specific base size.
+ * @color: A #GCVColor to specify text color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws the specified @text in the image with @color color and @drawing_options options.
+ *
+ * Since: 1.0.2
+ */
+void
+gcv_image_put_text(GCVImage *image,
+                   const gchar *text,
+                   GCVPoint *org,
+                   GCVHersheyFont font_face,
+                   gdouble font_scale,
+                   GCVColor *color,
+                   GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_org = gcv_point_get_raw(org);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::putText(*cv_image,
+                text,
+                *cv_org,
+                font_face,
+                font_scale,
+                *cv_color,
+                options_priv->thickness,
+                options_priv->line_type,
+                options_priv->bottom_left_origin);
+  } else {
+    cv::putText(*cv_image,
+                text,
+                *cv_org,
+                font_face,
+                font_scale,
+                *cv_color);
   }
 }
 

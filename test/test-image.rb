@@ -159,6 +159,41 @@ class TestImage < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("#put_text") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.put_text("hello",
+                        CV::Point.new(0, 30),
+                        :hershey_simplex, 2,
+                        CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point = CV::Point.new(0, 16)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.bottom_left_origin = true
+        cloned_image.put_text("Hello",
+                              point,
+                              :hershey_simplex,
+                              2,
+                              color) # draw without options
+        @image.put_text("Hello",
+                        point,
+                        :hershey_simplex,
+                        2,
+                        color,
+                        drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
     sub_test_case("#rectangle") do
       def test_simple
         cloned_image = @image.clone
