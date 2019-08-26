@@ -204,7 +204,7 @@ class TestImage < Test::Unit::TestCase
         drawing_options = CV::DrawingOptions.new
         drawing_options.thickness = 5
         drawing_options.line_type = :line_aa
-        drawing_options.bottom_left_origin = true
+        drawing_options.use_bottom_left_origin = true
         cloned_image.put_text("Hello",
                               point,
                               :hershey_simplex,
