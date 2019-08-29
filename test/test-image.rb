@@ -72,6 +72,36 @@ class TestImage < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("#arrowed_line") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_arrowed_line(CV::Point.new(10, 0),
+                                 CV::Point.new(10, 30),
+                                 CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point1 = CV::Point.new(10, 0)
+        point2 = CV::Point.new(10, 30)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.shift = 2
+        drawing_options.tip_length = 1
+        cloned_image.draw_arrowed_line(point1, point2, color) # draw without options
+        @image.draw_arrowed_line(point1,
+                                 point2,
+                                 color,
+                                 drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
     sub_test_case("#circle") do
       def test_simple
         cloned_image = @image.clone
@@ -93,6 +123,33 @@ class TestImage < Test::Unit::TestCase
         cloned_image.draw_circle(point, 10, color) # draw without options
         @image.draw_circle(point,
                            10,
+                           color,
+                           drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
+    sub_test_case("#marker") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_marker(CV::Point.new(16, 16),
+                           CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point = CV::Point.new(16, 16)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.marker_type = :triangle_up
+        drawing_options.marker_size = 30
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        cloned_image.draw_marker(point, color) # draw without options
+        @image.draw_marker(point,
                            color,
                            drawing_options) # draw with options
         assert_not_equal(cloned_image.bytes.to_s,
@@ -124,6 +181,41 @@ class TestImage < Test::Unit::TestCase
                          point2,
                          color,
                          drawing_options) # draw with options
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
+    sub_test_case("#put_text") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.put_text("hello",
+                        CV::Point.new(0, 30),
+                        :hershey_simplex, 2,
+                        CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        point = CV::Point.new(0, 16)
+        color = CV::Color.new(255, 127, 0, 2)
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 5
+        drawing_options.line_type = :line_aa
+        drawing_options.use_bottom_left_origin = true
+        cloned_image.put_text("Hello",
+                              point,
+                              :hershey_simplex,
+                              2,
+                              color) # draw without options
+        @image.put_text("Hello",
+                        point,
+                        :hershey_simplex,
+                        2,
+                        color,
+                        drawing_options) # draw with options
         assert_not_equal(cloned_image.bytes.to_s,
                          @image.bytes.to_s)
       end

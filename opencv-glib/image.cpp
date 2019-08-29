@@ -20,9 +20,13 @@ G_BEGIN_DECLS
  */
 
 typedef struct {
-  gint thickness;
   GCVLineType line_type;
+  gint marker_size;
+  GCVMarkerType marker_type;
   gint shift;
+  gint thickness;
+  gdouble tip_length;
+  gboolean use_bottom_left_origin;
 } GCVDrawingOptionsPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
@@ -33,9 +37,13 @@ G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT
                                GCVDrawingOptionsPrivate))
 
 enum {
-  PROP_THICKNESS = 1,
-  PROP_LINE_TYPE,
-  PROP_SHIFT
+  PROP_LINE_TYPE = 1,
+  PROP_MARKER_SIZE,
+  PROP_MARKER_TYPE,
+  PROP_SHIFT,
+  PROP_THICKNESS,
+  PROP_TIP_LENGTH,
+  PROP_USE_BOTTOM_LEFT_ORIGIN
 };
 
 static void
@@ -47,14 +55,26 @@ gcv_drawing_options_get_property(GObject *object,
   auto priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(object);
 
   switch (prop_id) {
-  case PROP_THICKNESS:
-    g_value_set_int(value, priv->thickness);
-    break;
   case PROP_LINE_TYPE:
     g_value_set_enum(value, priv->line_type);
     break;
+  case PROP_MARKER_SIZE:
+    g_value_set_int(value, priv->marker_size);
+    break;
+  case PROP_MARKER_TYPE:
+    g_value_set_enum(value, priv->marker_type);
+    break;
   case PROP_SHIFT:
     g_value_set_int(value, priv->shift);
+    break;
+  case PROP_THICKNESS:
+    g_value_set_int(value, priv->thickness);
+    break;
+  case PROP_TIP_LENGTH:
+    g_value_set_double(value, priv->tip_length);
+    break;
+  case PROP_USE_BOTTOM_LEFT_ORIGIN:
+    g_value_set_boolean(value, priv->use_bottom_left_origin);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -71,14 +91,26 @@ gcv_drawing_options_set_property(GObject *object,
   auto priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(object);
 
   switch (prop_id) {
-  case PROP_THICKNESS:
-    priv->thickness = g_value_get_int(value);
-    break;
   case PROP_LINE_TYPE:
     priv->line_type = static_cast<GCVLineType>(g_value_get_enum(value));
     break;
+  case PROP_MARKER_SIZE:
+    priv->marker_size = g_value_get_int(value);
+    break;
+  case PROP_MARKER_TYPE:
+    priv->marker_type = static_cast<GCVMarkerType>(g_value_get_enum(value));
+    break;
   case PROP_SHIFT:
     priv->shift = g_value_get_int(value);
+    break;
+  case PROP_THICKNESS:
+    priv->thickness = g_value_get_int(value);
+    break;
+  case PROP_TIP_LENGTH:
+    priv->tip_length = g_value_get_double(value);
+    break;
+  case PROP_USE_BOTTOM_LEFT_ORIGIN:
+    priv->use_bottom_left_origin = g_value_get_boolean(value);
     break;
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
@@ -101,13 +133,6 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
   gobject_class->get_property = gcv_drawing_options_get_property;
   gobject_class->set_property = gcv_drawing_options_set_property;
 
-  spec = g_param_spec_int("thickness",
-                          "Thickness",
-                          "The thickness of line to be drawn",
-                          0, G_MAXINT, 1,
-                          static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT));
-  g_object_class_install_property(gobject_class, PROP_THICKNESS, spec);
   spec = g_param_spec_enum("line-type",
                            "Line type",
                            "The type of line to be drawn",
@@ -116,6 +141,21 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
                            static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                     G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_LINE_TYPE, spec);
+  spec = g_param_spec_int("marker-size",
+                          "Marker size",
+                          "The length of the marker axis",
+                          0, G_MAXINT, 20,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_MARKER_SIZE, spec);
+  spec = g_param_spec_enum("marker-type",
+                           "Marker type",
+                           "The type of marker to be drawn",
+                           GCV_TYPE_MARKER_TYPE,
+                           GCV_MARKER_TYPE_CROSS,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                    G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_MARKER_TYPE, spec);
   spec = g_param_spec_int("shift",
                           "Shift",
                           "The number of fractional bits in the point coordinates",
@@ -123,6 +163,27 @@ gcv_drawing_options_class_init(GCVDrawingOptionsClass *klass)
                           static_cast<GParamFlags>(G_PARAM_READWRITE |
                                                    G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_SHIFT, spec);
+  spec = g_param_spec_int("thickness",
+                          "Thickness",
+                          "The thickness of line to be drawn",
+                          0, G_MAXINT, 1,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_THICKNESS, spec);
+  spec = g_param_spec_double("tip-length",
+                             "Tip length",
+                             "The length of the arrow tip in relation to the arrow length",
+                             0, G_MAXDOUBLE, 0.1,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_TIP_LENGTH, spec);
+  spec = g_param_spec_boolean("use-bottom-left-origin",
+                              "Use bottom left origin",
+                              "When true, the image data origin is at the bottom-left corner. Otherwise, it is at the top-left corner.",
+                              FALSE,
+                              static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                       G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_USE_BOTTOM_LEFT_ORIGIN, spec);
 }
 
 /**
@@ -244,6 +305,47 @@ gcv_image_convert_color(GCVImage *image,
 }
 
 /**
+ * gcv_image_draw_arrowed_line:
+ * @image: A #GCVImage.
+ * @point1: A #GCVPoint to specify the point the arrow starts from.
+ * @point2: A #GCVPoint to specify the point the arrow points to.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a arrow segment pointing from @point1 to @point2
+  *
+ * Since: 1.0.2
+ */
+void
+gcv_image_draw_arrowed_line(GCVImage *image,
+                            GCVPoint *point1,
+                            GCVPoint *point2,
+                            GCVColor *color,
+                            GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_point1 = gcv_point_get_raw(point1);
+  auto cv_point2 = gcv_point_get_raw(point2);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::arrowedLine(*cv_image,
+                    *cv_point1,
+                    *cv_point2,
+                    *cv_color,
+                    options_priv->thickness,
+                    options_priv->line_type,
+                    options_priv->shift,
+                    options_priv->tip_length);
+  } else {
+    cv::arrowedLine(*cv_image,
+                    *cv_point1,
+                    *cv_point2,
+                    *cv_color);
+  }
+}
+
+/**
  * gcv_image_draw_circle:
  * @image: A #GCVImage.
  * @center: A #GCVPoint to specify center.
@@ -279,6 +381,42 @@ gcv_image_draw_circle(GCVImage *image,
                *cv_center,
                radius,
                *cv_color);
+  }
+}
+
+/**
+ * gcv_image_draw_marker:
+ * @image: A #GCVImage.
+ * @position: A #GCVPoint to specify the point where the crosshair is positioned.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws a marker on @position with @color color and @drawing_options options.
+ *
+ * Since: 1.0.2
+ */
+void
+gcv_image_draw_marker(GCVImage *image,
+                      GCVPoint *position,
+                      GCVColor *color,
+                      GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_position = gcv_point_get_raw(position);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::drawMarker(*cv_image,
+                   *cv_position,
+                   *cv_color,
+                   options_priv->marker_type,
+                   options_priv->marker_size,
+                   options_priv->thickness,
+                   options_priv->line_type);
+  } else {
+    cv::drawMarker(*cv_image,
+                   *cv_position,
+                   *cv_color);
   }
 }
 
@@ -319,6 +457,53 @@ gcv_image_draw_line(GCVImage *image,
              *cv_point1,
              *cv_point2,
              *cv_color);
+  }
+}
+
+/**
+ * gcv_image_put_text
+ * @image: A #GCVImage.
+ * @text: The text string to be drawn.
+ * @org: The bottom-left corner of the text string in the image.
+ * @font_face: The font type.
+ * @font_scale: The font scale factor that is multiplied by the font-specific base size.
+ * @color: A #GCVColor to specify text color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws the specified @text in the image with @color color and @drawing_options options.
+ *
+ * Since: 1.0.2
+ */
+void
+gcv_image_put_text(GCVImage *image,
+                   const gchar *text,
+                   GCVPoint *org,
+                   GCVHersheyFont font_face,
+                   gdouble font_scale,
+                   GCVColor *color,
+                   GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_org = gcv_point_get_raw(org);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::putText(*cv_image,
+                text,
+                *cv_org,
+                font_face,
+                font_scale,
+                *cv_color,
+                options_priv->thickness,
+                options_priv->line_type,
+                options_priv->use_bottom_left_origin);
+  } else {
+    cv::putText(*cv_image,
+                text,
+                *cv_org,
+                font_face,
+                font_scale,
+                *cv_color);
   }
 }
 

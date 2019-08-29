@@ -8,6 +8,40 @@
 G_BEGIN_DECLS
 
 /**
+ * GCVHersheyFont:
+ * @GCV_HERSHEY_FONT_HERSHEY_SIMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SIMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_PLAIN: See `cv::HersheyFonts::FONT_HERSHEY_PLAIN`.
+ * @GCV_HERSHEY_FONT_HERSHEY_DUPLEX: See `cv::HersheyFonts::FONT_HERSHEY_DUPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_COMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_COMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_TRIPLEX: See `cv::HersheyFonts::FONT_HERSHEY_TRIPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_COMPLEX_SMALL: See `cv::HersheyFonts::FONT_HERSHEY_COMPLEX_SMALL`.
+ * @GCV_HERSHEY_FONT_HERSHEY_SCRIPT_SIMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SCRIPT_SIMPLEX`.
+ * @GCV_HERSHEY_FONT_HERSHEY_SCRIPT_COMPLEX: See `cv::HersheyFonts::FONT_HERSHEY_SCRIPT_COMPLEX`.
+ * @GCV_HERSHEY_FONT_ITALIC: See `cv::HersheyFonts::FONT_ITALIC`.
+ *
+ * Line type for drawing functions corresponding to `cv::HersheyFonts`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::HersheyFonts` document.
+ * But we can link to a specific version:
+ * [OpenCV 3.4.1's `cv::HersheyFonts`](https://docs.opencv.org/3.4.1/d0/de1/group__core.html#ga0f9314ea6e35f99bb23f29567fc16e11).
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_HERSHEY_FONT_HERSHEY_SIMPLEX = 0,
+  GCV_HERSHEY_FONT_HERSHEY_PLAIN = 1,
+  GCV_HERSHEY_FONT_HERSHEY_DUPLEX = 2,
+  GCV_HERSHEY_FONT_HERSHEY_COMPLEX = 3,
+  GCV_HERSHEY_FONT_HERSHEY_TRIPLEX = 4,
+  GCV_HERSHEY_FONT_HERSHEY_COMPLEX_SMALL = 5,
+  GCV_HERSHEY_FONT_HERSHEY_SCRIPT_SIMPLEX = 6,
+  GCV_HERSHEY_FONT_HERSHEY_SCRIPT_COMPLEX = 7,
+  GCV_HERSHEY_FONT_ITALIC = 16
+} GCVHersheyFont;
+
+/**
  * GCVLineType:
  * @GCV_LINE_TYPE_FILLED: See `cv::LineTypes::FILLED`.
  * @GCV_LINE_TYPE_LINE_4: See `cv::LineTypes::LINE_4`.
@@ -30,6 +64,36 @@ typedef enum {
   GCV_LINE_TYPE_LINE_8 = 8,
   GCV_LINE_TYPE_LINE_AA = 16
 } GCVLineType;
+
+/**
+ * GCVMarkerType:
+ * @GCV_MARKER_TYPE_CROSS: See `cv::MarkerTypes::MARKER_CROSS`.
+ * @GCV_MARKER_TYPE_TILTED_CROSS: See `cv::MarkerTypes::MARKER_TILTED_CROSS`.
+ * @GCV_MARKER_TYPE_STAR: See `cv::MarkerTypes::MARKER_STAR`.
+ * @GCV_MARKER_TYPE_DIAMOND: See `cv::MarkerTypes::MARKER_DIAMOND`.
+ * @GCV_MARKER_TYPE_SQUARE: See `cv::MarkerTypes::MARKER_SQUARE`.
+ * @GCV_MARKER_TYPE_TRIANGLE_UP: See `cv::MarkerTypes::MARKER_TRIANGLE_UP`.
+ * @GCV_MARKER_TYPE_TRIANGLE_DOWN: See `cv::MarkerTypes::MARKER_TRIANGLE_DOWN`.
+ *
+ * Line type for drawing functions corresponding to `cv::MarkerTypes`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::MarkerTypes` document.
+ * But we can link to a specific version:
+ * [OpenCV 3.4.1's `cv::MarkerTypes`](https://docs.opencv.org/3.4.1/d6/d6e/group__imgproc__draw.html#ga0ad87faebef1039ec957737ecc633b7b).
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_MARKER_TYPE_CROSS = 0,
+  GCV_MARKER_TYPE_TILTED_CROSS = 1,
+  GCV_MARKER_TYPE_STAR = 2,
+  GCV_MARKER_TYPE_DIAMOND = 3,
+  GCV_MARKER_TYPE_SQUARE = 4,
+  GCV_MARKER_TYPE_TRIANGLE_UP = 5,
+  GCV_MARKER_TYPE_TRIANGLE_DOWN = 6
+} GCVMarkerType;
 
 #define GCV_TYPE_DRAWING_OPTIONS (gcv_drawing_options_get_type())
 G_DECLARE_DERIVABLE_TYPE(GCVDrawingOptions,
@@ -116,9 +180,18 @@ gboolean gcv_image_write(GCVImage *image,
 
 GCVImage *gcv_image_convert_color(GCVImage *image,
                                   GCVColorConversionCode code);
+void gcv_image_draw_arrowed_line(GCVImage *image,
+                                 GCVPoint *point1,
+                                 GCVPoint *point2,
+                                 GCVColor *color,
+                                 GCVDrawingOptions *drawing_options);
 void gcv_image_draw_circle(GCVImage *image,
                            GCVPoint *center,
                            gint radius,
+                           GCVColor *color,
+                           GCVDrawingOptions *drawing_options);
+void gcv_image_draw_marker(GCVImage *image,
+                           GCVPoint *position,
                            GCVColor *color,
                            GCVDrawingOptions *drawing_options);
 void gcv_image_draw_line(GCVImage *image,
@@ -126,6 +199,13 @@ void gcv_image_draw_line(GCVImage *image,
                          GCVPoint *point2,
                          GCVColor *color,
                          GCVDrawingOptions *drawing_options);
+void gcv_image_put_text(GCVImage *image,
+                        const gchar *text,
+                        GCVPoint *org,
+                        GCVHersheyFont font_face,
+                        gdouble font_scale,
+                        GCVColor *color,
+                        GCVDrawingOptions *drawing_options);
 void gcv_image_draw_rectangle(GCVImage *image,
                               GCVRectangle *rectangle,
                               GCVColor *color,
