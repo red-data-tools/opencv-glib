@@ -280,5 +280,17 @@ class TestImage < Test::Unit::TestCase
                          @image.bytes.to_s)
       end
     end
+
+    def test_abs_diff
+      lined_image = @image.clone
+      lined_image.draw_line(CV::Point.new(10, 10),
+                            CV::Point.new(30, 20),
+                            CV::Color.new(255, 127, 0, 2))
+      expected_path = fixture_path("mail-forward-lined-abs-diff.png")
+      expected = CV::Image.read(expected_path.to_s,
+                                :unchanged)
+      assert_equal(expected.bytes.to_s,
+                   @image.abs_diff(lined_image).bytes.to_s)
+    end
   end
 end

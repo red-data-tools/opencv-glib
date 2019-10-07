@@ -216,4 +216,8 @@ void gcv_image_draw_rectangle_points(GCVImage *image,
                                      GCVColor *color,
                                      GCVDrawingOptions *drawing_options);
 
+GCVImage *
+gcv_image_abs_diff(GCVImage *image,
+                   GCVImage *other_image);
+
 G_END_DECLS

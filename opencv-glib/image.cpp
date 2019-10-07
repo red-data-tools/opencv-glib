@@ -582,6 +582,29 @@ gcv_image_draw_rectangle_points(GCVImage *image,
   }
 }
 
+/**
+ * gcv_image_abs_diff:
+ * @image: A #GCVImage.
+ * @other_image: A #GCVImage.
+ *
+ * See also `cv::absdiff()` in OpenCV.
+ *
+ * Returns: (transfer full): A newly created #GCVImage that has per-element
+ *   absolute difference between @image and @other_image.
+ *
+ * Since: 1.0.3
+ */
+GCVImage *
+gcv_image_abs_diff(GCVImage *image,
+                   GCVImage *other_image)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_other_image = gcv_matrix_get_raw(GCV_MATRIX(other_image));
+  auto cv_output = std::make_shared<cv::Mat>();
+  cv::absdiff(*cv_image, *cv_other_image, *cv_output);
+  return gcv_image_new_raw(&cv_output);
+}
+
 G_END_DECLS
 
 GCVImage *
