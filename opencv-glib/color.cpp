@@ -18,10 +18,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVColor, gcv_color, G_TYPE_OBJECT)
 
-#define GCV_COLOR_GET_PRIVATE(obj)                         \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                      \
-                               GCV_TYPE_COLOR,             \
-                               GCVColorPrivate))
+#define GCV_COLOR_GET_PRIVATE(object)           \
+  static_cast<GCVColorPrivate *>(               \
+    gcv_color_get_instance_private(             \
+      GCV_COLOR(object)))
 
 enum {
   PROP_0,

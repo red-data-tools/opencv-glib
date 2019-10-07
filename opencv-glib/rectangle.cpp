@@ -18,10 +18,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVRectangle, gcv_rectangle, G_TYPE_OBJECT)
 
-#define GCV_RECTANGLE_GET_PRIVATE(obj)                     \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                      \
-                               GCV_TYPE_RECTANGLE,         \
-                               GCVRectanglePrivate))
+#define GCV_RECTANGLE_GET_PRIVATE(object)                       \
+  static_cast<GCVRectanglePrivate *>(                           \
+    gcv_rectangle_get_instance_private(                         \
+      GCV_RECTANGLE(object)))
 
 enum {
   PROP_0,

@@ -25,10 +25,10 @@ G_DEFINE_TYPE_WITH_PRIVATE(GCVCascadeClassifier,                        \
                            gcv_cascade_classifier,                      \
                            G_TYPE_OBJECT)
 
-#define GCV_CASCADE_CLASSIFIER_GET_PRIVATE(obj)                     \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                               \
-                               GCV_TYPE_CASCADE_CLASSIFIER,         \
-                               GCVCascadeClassifierPrivate))
+#define GCV_CASCADE_CLASSIFIER_GET_PRIVATE(object)      \
+  static_cast<GCVCascadeClassifierPrivate *>(           \
+    gcv_cascade_classifier_get_instance_private(        \
+      GCV_CASCADE_CLASSIFIER(object)))
 
 enum {
   PROP_0,

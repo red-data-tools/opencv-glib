@@ -31,10 +31,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVDrawingOptions, gcv_drawing_options, G_TYPE_OBJECT)
 
-#define GCV_DRAWING_OPTIONS_GET_PRIVATE(obj)              \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                     \
-                               GCV_TYPE_DRAWING_OPTIONS,  \
-                               GCVDrawingOptionsPrivate))
+#define GCV_DRAWING_OPTIONS_GET_PRIVATE(object) \
+  static_cast<GCVDrawingOptionsPrivate *>(      \
+    gcv_drawing_options_get_instance_private(   \
+      GCV_DRAWING_OPTIONS(object)))
 
 enum {
   PROP_LINE_TYPE = 1,

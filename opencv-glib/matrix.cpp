@@ -18,10 +18,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVMatrix, gcv_matrix, G_TYPE_OBJECT)
 
-#define GCV_MATRIX_GET_PRIVATE(obj)                     \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                   \
-                               GCV_TYPE_MATRIX,         \
-                               GCVMatrixPrivate))
+#define GCV_MATRIX_GET_PRIVATE(object)          \
+  static_cast<GCVMatrixPrivate *>(              \
+    gcv_matrix_get_instance_private(            \
+      GCV_MATRIX(object)))
 
 enum {
   PROP_0,

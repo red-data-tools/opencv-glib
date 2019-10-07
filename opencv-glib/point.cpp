@@ -18,10 +18,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVPoint, gcv_point, G_TYPE_OBJECT)
 
-#define GCV_POINT_GET_PRIVATE(obj)                     \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                  \
-                               GCV_TYPE_POINT,         \
-                               GCVPointPrivate))
+#define GCV_POINT_GET_PRIVATE(object)           \
+  static_cast<GCVPointPrivate *>(               \
+    gcv_point_get_instance_private(             \
+      GCV_POINT(object)))
 
 enum {
   PROP_POINT = 1

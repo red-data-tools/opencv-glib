@@ -19,10 +19,10 @@ typedef struct {
 
 G_DEFINE_TYPE_WITH_PRIVATE(GCVVideoCapture, gcv_video_capture, G_TYPE_OBJECT)
 
-#define GCV_VIDEO_CAPTURE_GET_PRIVATE(obj)              \
-  (G_TYPE_INSTANCE_GET_PRIVATE((obj),                   \
-                               GCV_TYPE_VIDEO_CAPTURE,  \
-                               GCVVideoCapturePrivate))
+#define GCV_VIDEO_CAPTURE_GET_PRIVATE(object)   \
+  static_cast<GCVVideoCapturePrivate *>(        \
+    gcv_video_capture_get_instance_private(     \
+      GCV_VIDEO_CAPTURE(object)))
 
 enum {
   PROP_0,
