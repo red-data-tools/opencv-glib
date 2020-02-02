@@ -4,6 +4,7 @@
 #include <opencv-glib/image-error.h>
 #include <opencv-glib/point.hpp>
 #include <opencv-glib/rectangle.hpp>
+#include <opencv-glib/size.hpp>
 
 #include <opencv2/imgproc.hpp>
 
@@ -417,6 +418,58 @@ gcv_image_draw_marker(GCVImage *image,
     cv::drawMarker(*cv_image,
                    *cv_position,
                    *cv_color);
+  }
+}
+
+/**
+ * gcv_image_draw_ellipse_point:
+ * @image: A #GCVImage.
+ * @center: A #GCVPoint to specify center.
+ * @axes: A #GCVSize to specify the half of the size of the ellipse main axes.
+ * @angle: The ellipse rotation angle in degrees.
+ * @start_angle: The starting angle of the elliptic arc in degrees.
+ * @end_angle: The ending angle of the elliptic arc in degrees.
+ * @color: A #GCVColor to specify line color.
+ * @drawing_options: (nullable): A #GCVDrawingOptions to specify optional parameters.
+ *
+ * It draws an ellipse on @center position with @axes, @angle, @start_angle, @end_angle, @color and @drawing_options
+ *
+ * Since: 1.0.3
+ */
+void
+gcv_image_draw_ellipse_point(GCVImage *image,
+                             GCVPoint *center,
+                             GCVSize *axes,
+                             gdouble angle,
+                             gdouble start_angle,
+                             gdouble end_angle,
+                             GCVColor *color,
+                             GCVDrawingOptions *drawing_options)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_center = gcv_point_get_raw(center);
+  auto cv_axes = gcv_size_get_raw(axes);
+  auto cv_color = gcv_color_get_raw(color);
+  if (drawing_options) {
+    auto options_priv = GCV_DRAWING_OPTIONS_GET_PRIVATE(drawing_options);
+    cv::ellipse(*cv_image,
+                *cv_center,
+                *cv_axes,
+                angle,
+                start_angle,
+                end_angle,
+                *cv_color,
+                options_priv->thickness,
+                options_priv->line_type,
+                options_priv->shift);
+  } else {
+    cv::ellipse(*cv_image,
+                *cv_center,
+                *cv_axes,
+                angle,
+                start_angle,
+                end_angle,
+                *cv_color);
   }
 }
 

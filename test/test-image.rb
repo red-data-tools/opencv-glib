@@ -157,6 +157,37 @@ class TestImage < Test::Unit::TestCase
       end
     end
 
+    sub_test_case("#ellipse with point") do
+      def test_simple
+        cloned_image = @image.clone
+        @image.draw_ellipse_point(CV::Point.new(16, 16),
+                                  CV::Size.new(10, 8),
+                                  45,
+                                  0,
+                                  300,
+                                  CV::Color.new(255, 127, 0, 2))
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+
+      def test_drawing_options
+        cloned_image = @image.clone
+        drawing_options = CV::DrawingOptions.new
+        drawing_options.thickness = 2
+        drawing_options.line_type = :line_aa
+        drawing_options.shift = 2
+        @image.draw_ellipse_point(CV::Point.new(16, 16),
+                                  CV::Size.new(10, 8),
+                                  45,
+                                  0,
+                                  300,
+                                  CV::Color.new(255, 127, 0, 2),
+                                  drawing_options)
+        assert_not_equal(cloned_image.bytes.to_s,
+                         @image.bytes.to_s)
+      end
+    end
+
     sub_test_case("#line") do
       def test_simple
         cloned_image = @image.clone
