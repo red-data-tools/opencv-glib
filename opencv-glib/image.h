@@ -4,6 +4,7 @@
 #include <opencv-glib/matrix.h>
 #include <opencv-glib/point.h>
 #include <opencv-glib/rectangle.h>
+#include <opencv-glib/size.h>
 
 G_BEGIN_DECLS
 
@@ -194,6 +195,14 @@ void gcv_image_draw_marker(GCVImage *image,
                            GCVPoint *position,
                            GCVColor *color,
                            GCVDrawingOptions *drawing_options);
+void gcv_image_draw_ellipse_point(GCVImage *image,
+                                  GCVPoint *center,
+                                  GCVSize *axes,
+                                  gdouble angle,
+                                  gdouble start_angle,
+                                  gdouble end_angle,
+                                  GCVColor *color,
+                                  GCVDrawingOptions *drawing_options);
 void gcv_image_draw_line(GCVImage *image,
                          GCVPoint *point1,
                          GCVPoint *point2,
