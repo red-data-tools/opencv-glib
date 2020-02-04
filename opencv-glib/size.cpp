@@ -173,8 +173,8 @@ GCVSize *
 gcv_size_new_raw(std::shared_ptr<cv::Size> *cv_size)
 {
   auto size = g_object_new(GCV_TYPE_SIZE,
-                            "size", cv_size,
-                            NULL);
+                           "size", cv_size,
+                           NULL);
   return GCV_SIZE(size);
 }
 
