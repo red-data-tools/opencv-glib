@@ -22,31 +22,31 @@ class TestSize < Test::Unit::TestCase
   sub_test_case("#clip_line") do
     def test_true
       size = CV::Size.new(100, 100)
-      pt1 = CV::Point.new(-10, 0)
-      pt2 = CV::Point.new(110, 100)
-      inside, new_pt1, new_pt2 = size.clip_line(pt1, pt2)
+      point1 = CV::Point.new(-10, 0)
+      point2 = CV::Point.new(110, 100)
+      inside, new_point1, new_point2 = size.clip_line(point1, point2)
       assert_equal([true, 0, 8, 99, 91],
                    [
                      inside,
-                     new_pt1.x,
-                     new_pt1.y,
-                     new_pt2.x,
-                     new_pt2.y
+                     new_point1.x,
+                     new_point1.y,
+                     new_point2.x,
+                     new_point2.y
                     ])
     end
 
     def test_false
       size = CV::Size.new(100, 100)
-      pt1 = CV::Point.new(200, 200)
-      pt2 = CV::Point.new(300, 300)
-      inside, new_pt1, new_pt2 = size.clip_line(pt1, pt2)
+      point1 = CV::Point.new(200, 200)
+      point2 = CV::Point.new(300, 300)
+      inside, new_point1, new_point2 = size.clip_line(point1, point2)
       assert_equal([false, 200, 200, 300, 300],
                    [
                      inside,
-                     new_pt1.x,
-                     new_pt1.y,
-                     new_pt2.x,
-                     new_pt2.y
+                     new_point1.x,
+                     new_point1.y,
+                     new_point2.x,
+                     new_point2.y
                     ])
     end
   end
