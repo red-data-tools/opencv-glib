@@ -21,5 +21,7 @@ jobs:
           bundle install
       - name: Test
         run: |
-          cd ../opencv-glib.build
-          bundle exec ../opencv-glib/test/run-test.sh
+          (bundle exec ninja -C ../opencv-glib.build test; \
+           code=$?; \
+           cat ../opencv-glib.build/meson-logs/testlog.txt; \
+           exit $code)
