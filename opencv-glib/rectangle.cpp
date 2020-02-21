@@ -250,8 +250,7 @@ gcv_rectangle_clip_line(GCVRectangle *rectangle,
   auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
   auto cv_point1 = gcv_point_get_raw(*point1);
   auto cv_point2 = gcv_point_get_raw(*point2);
-  gboolean ret = cv::clipLine(*cv_rectangle, *cv_point1, *cv_point2);
-  return ret;
+  return cv::clipLine(*cv_rectangle, *cv_point1, *cv_point2);
 }
 
 G_END_DECLS

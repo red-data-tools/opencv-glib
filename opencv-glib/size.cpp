@@ -187,8 +187,7 @@ gcv_size_clip_line(GCVSize *size, GCVPoint **point1, GCVPoint **point2)
   auto cv_size = gcv_size_get_raw(size);
   auto cv_point1 = gcv_point_get_raw(*point1);
   auto cv_point2 = gcv_point_get_raw(*point2);
-  gboolean ret = cv::clipLine(*cv_size, *cv_point1, *cv_point2);
-  return ret;
+  return cv::clipLine(*cv_size, *cv_point1, *cv_point2);
 }
 
 G_END_DECLS
