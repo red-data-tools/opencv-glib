@@ -1,0 +1,25 @@
+name: macOS
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Test
+    runs-on: macOS-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-ruby@master
+      - name: Install dependencies
+        run: |
+          brew bundle
+      - name: Build
+        run: |
+          meson ../opencv-glib.build
+          ninja -C ../opencv-glib.build
+      - name: Install gobject-introspection gem
+        run: |
+          gem install gobject-introspection
+      - name: Test
+        run: |
+          cd ../opencv-glib.build
+          ../opencv-glib/test/run-test.sh
