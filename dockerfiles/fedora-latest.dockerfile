@@ -4,6 +4,7 @@ RUN \
   dnf install -y \
     gcc \
     gcc-c++ \
+    gobject-introspection \
     make \
     meson \
     opencv-devel \

@@ -4,6 +4,7 @@ RUN \
   pacman --sync --noconfirm --refresh && \
   pacman --sync --noconfirm \
     gcc \
+    gobject-introspection \
     make \
     meson \
     opencv \

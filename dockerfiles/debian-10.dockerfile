@@ -9,6 +9,7 @@ RUN \
   apt install -y \
     g++ \
     gcc \
+    libgirepository1.0-dev \
     libopencv-dev \
     make \
     meson \
