@@ -1,6 +1,5 @@
 #pragma once
 
-#include <glib-object.h>
 #include <opencv-glib/point.h>
 
 G_BEGIN_DECLS
