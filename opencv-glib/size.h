@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glib-object.h>
+#include <opencv-glib/point.h>
 
 G_BEGIN_DECLS
 
@@ -22,5 +22,6 @@ gint gcv_size_get_width(GCVSize *size);
 void gcv_size_set_width(GCVSize *size, gint width);
 gint gcv_size_get_height(GCVSize *size);
 void gcv_size_set_height(GCVSize *size, gint height);
+gboolean gcv_size_clip_line(GCVSize *size, GCVPoint **point1, GCVPoint **point2);
 
 G_END_DECLS

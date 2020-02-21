@@ -1,4 +1,7 @@
+#include <opencv-glib/point.hpp>
 #include <opencv-glib/rectangle.hpp>
+
+#include <opencv2/imgproc.hpp>
 
 G_BEGIN_DECLS
 
@@ -226,6 +229,28 @@ gcv_rectangle_set_height(GCVRectangle *rectangle, gint height)
 {
   auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
   cv_rectangle->height = height;
+}
+
+/**
+ * gcv_rectangle_clip_line:
+ * @rectangle: A #GCVRectangle
+ * @point1: (inout): A #GCVPoint to specify the first point
+ * @point2: (inout): A #GCVPoint to specify the second point
+ *
+ * Returns: %FALSE if the line segment is completely outside the
+ *   rectangle, %TRUE otherwise.
+ *
+ * Since: 1.0.3
+ */
+gboolean
+gcv_rectangle_clip_line(GCVRectangle *rectangle,
+                        GCVPoint **point1,
+                        GCVPoint **point2)
+{
+  auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
+  auto cv_point1 = gcv_point_get_raw(*point1);
+  auto cv_point2 = gcv_point_get_raw(*point2);
+  return cv::clipLine(*cv_rectangle, *cv_point1, *cv_point2);
 }
 
 G_END_DECLS
