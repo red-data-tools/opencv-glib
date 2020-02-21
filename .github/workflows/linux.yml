@@ -10,7 +10,7 @@ jobs:
       matrix:
         target:
           - arch-linux
-          - fedora-rawhide
+          - fedora-latest
           - ubuntu-18.04
           - debian-10
     runs-on: ubuntu-latest
