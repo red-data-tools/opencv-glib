@@ -28,10 +28,10 @@ class TestRectangle < Test::Unit::TestCase
       rectangle = CV::Rectangle.new(10, 10, 80, 80)
       pt1 = CV::Point.new(0, 10)
       pt2 = CV::Point.new(100, 90)
-      ret, new_pt1, new_pt2 = rectangle.clip_line(pt1, pt2)
+      inside, new_pt1, new_pt2 = rectangle.clip_line(pt1, pt2)
       assert_equal([true, 10, 17, 89, 81],
                    [
-                     ret,
+                     inside,
                      new_pt1.x,
                      new_pt1.y,
                      new_pt2.x,
@@ -43,10 +43,10 @@ class TestRectangle < Test::Unit::TestCase
       rectangle = CV::Rectangle.new(10, 10, 80, 80)
       pt1 = CV::Point.new(200, 200)
       pt2 = CV::Point.new(300, 300)
-      ret, new_pt1, new_pt2 = rectangle.clip_line(pt1, pt2)
+      inside, new_pt1, new_pt2 = rectangle.clip_line(pt1, pt2)
       assert_equal([false, 200, 200, 300, 300],
                    [
-                     ret,
+                     inside,
                      new_pt1.x,
                      new_pt1.y,
                      new_pt2.x,
