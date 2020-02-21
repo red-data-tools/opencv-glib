@@ -58,14 +58,19 @@ install_headers(headers, subdir: meson.project_name())
 
 opencv = dependency('opencv4', required: false)
 if opencv.found()
-  opencv_directory_name = 'opencv4'
+  opencv_data_directory_base_name = 'opencv4'
 else
   opencv = dependency('opencv')
-  opencv_directory_name = 'opencv'
+  if opencv.get_pkgconfig_variable('libdir').endswith('lib64')
+    # Fedora uses "/usr/share/OpenCV"
+    opencv_data_directory_base_name = 'OpenCV'
+  else
+    opencv_data_directory_base_name = 'opencv'
+  endif
 endif
 opencv_data_directory = join_paths(opencv.get_pkgconfig_variable('prefix'),
 				   'share',
-				   opencv_directory_name)
+				   opencv_data_directory_base_name)
 config_h_data = configuration_data()
 config_h_data.set_quoted('OPENCV_DATA_DIRECTORY', opencv_data_directory)
 config_h = configure_file(input: 'config.h.meson',
