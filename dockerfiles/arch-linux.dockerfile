@@ -4,14 +4,17 @@ RUN \
   pacman --sync --noconfirm --refresh && \
   pacman --sync --noconfirm \
     gcc \
+    glew \
     gobject-introspection \
+    hdf5 \
     make \
     meson \
     opencv \
     pkg-config \
     qt5 \
     ruby \
-    sudo
+    sudo \
+    vtk
 
 RUN \
   gem install \
