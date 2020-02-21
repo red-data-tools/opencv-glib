@@ -1,5 +1,5 @@
-#include <opencv-glib/rectangle.hpp>
 #include <opencv-glib/point.hpp>
+#include <opencv-glib/rectangle.hpp>
 
 #include <opencv2/imgproc.hpp>
 

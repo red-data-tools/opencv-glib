@@ -1,5 +1,5 @@
-#include <opencv-glib/size.hpp>
 #include <opencv-glib/point.hpp>
+#include <opencv-glib/size.hpp>
 
 #include <opencv2/imgproc.hpp>
 
