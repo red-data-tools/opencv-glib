@@ -1,0 +1,29 @@
+name: Linux
+on:
+  - push
+  - pull_request
+jobs:
+  test:
+    name: Test
+    strategy:
+      fail-fast: false
+      matrix:
+        target:
+          - arch-linux
+          - fedora-rawhide
+          - ubuntu-18.04
+          - debian-10
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Build Docker image
+        run: |
+          docker build \
+            -t red-data-tools/opencv-glib-${{ matrix.target }} \
+            -f dockerfiles/${{ matrix.target }}.dockerfile \
+            .
+      - name: Run
+        run: |
+          docker run \
+            --interactive \
+            red-data-tools/opencv-glib-${{ matrix.target }}

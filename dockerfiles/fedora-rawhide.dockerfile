@@ -1,16 +1,14 @@
-FROM ubuntu:18.04
-
-ENV DEBIAN_FRONTEND=noninteractive
+FROM fedora:rawhide
 
 RUN \
-  apt update && \
-  apt install -y \
-    g++ \
+  dnf install -y \
     gcc \
-    libopencv-dev \
+    gcc-c++ \
+    make \
     meson \
-    opencv-data \
-    ruby-dev \
+    opencv-devel \
+    redhat-rpm-config \
+    ruby-devel \
     sudo
 
 RUN \
@@ -24,6 +22,7 @@ RUN \
     EDITOR=tee visudo -f /etc/sudoers.d/opencv-glib
 
 COPY . /home/opencv-glib/opencv-glib
+RUN chown -R opencv-glib: /home/opencv-glib/opencv-glib
 
 USER opencv-glib
 WORKDIR /home/opencv-glib/opencv-glib

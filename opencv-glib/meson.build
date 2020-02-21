@@ -56,10 +56,16 @@ enums_header = enums[1]
 headers = c_headers + cpp_headers
 install_headers(headers, subdir: meson.project_name())
 
-opencv = dependency('opencv')
+opencv = dependency('opencv4', required: false)
+if opencv.found()
+  opencv_directory_name = 'opencv4'
+else
+  opencv = dependency('opencv')
+  opencv_directory_name = 'opencv'
+endif
 opencv_data_directory = join_paths(opencv.get_pkgconfig_variable('prefix'),
 				   'share',
-				   'opencv')
+				   opencv_directory_name)
 config_h_data = configuration_data()
 config_h_data.set_quoted('OPENCV_DATA_DIRECTORY', opencv_data_directory)
 config_h = configure_file(input: 'config.h.meson',
