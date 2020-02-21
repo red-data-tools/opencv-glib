@@ -17,7 +17,7 @@ RUN \
     vtk
 
 RUN \
-  gem install \
+  gem install --no-user-install \
     gobject-introspection \
     test-unit
 
