@@ -242,7 +242,9 @@ gcv_rectangle_set_height(GCVRectangle *rectangle, gint height)
  * Since: 1.0.3
  */
 gboolean
-gcv_rectangle_clip_line(GCVRectangle* rectangle, GCVPoint **point1, GCVPoint **point2)
+gcv_rectangle_clip_line(GCVRectangle *rectangle,
+                        GCVPoint **point1,
+                        GCVPoint **point2)
 {
   auto cv_rectangle = gcv_rectangle_get_raw(rectangle);
   auto cv_point1 = gcv_point_get_raw(*point1);
