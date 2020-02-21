@@ -16,10 +16,10 @@ jobs:
         run: |
           meson ../opencv-glib.build
           ninja -C ../opencv-glib.build
-      - name: Install gobject-introspection gem
+      - name: Install gems for test
         run: |
-          gem install gobject-introspection
+          bundle install
       - name: Test
         run: |
           cd ../opencv-glib.build
-          ../opencv-glib/test/run-test.sh
+          bundle exec ../opencv-glib/test/run-test.sh

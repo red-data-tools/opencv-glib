@@ -16,7 +16,7 @@ RUN \
     sudo
 
 RUN \
-  gem install gobject-introspection
+  gem install bundler
 
 RUN \
   useradd --user-group --create-home opencv-glib
@@ -34,7 +34,8 @@ CMD \
   BUILD_DIR=../opencv-glib.build; \
   meson ${BUILD_DIR} && \
   ninja -C ${BUILD_DIR} && \
-  (ninja -C ${BUILD_DIR} test; \
+  bundle install && \
+  (bundle exec ninja -C ${BUILD_DIR} test; \
    code=$?; \
    cat ${BUILD_DIR}/meson-logs/testlog.txt; \
    exit $code)
