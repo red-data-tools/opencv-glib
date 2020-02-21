@@ -237,7 +237,8 @@ gcv_rectangle_set_height(GCVRectangle *rectangle, gint height)
  * @point1: (inout): A #GCVPoint to specify the first point
  * @point2: (inout): A #GCVPoint to specify the second point
  *
- * Returns: %FALSE if the line segment is completely outside the rectangle. Otherwise %TRUE.
+ * Returns: %FALSE if the line segment is completely outside the
+ *   rectangle, %TRUE otherwise.
  *
  * Since: 1.0.3
  */
