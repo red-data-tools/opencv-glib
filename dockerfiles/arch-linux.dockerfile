@@ -7,6 +7,7 @@ RUN \
     make \
     meson \
     opencv \
+    pkg-config \
     ruby \
     sudo
 
