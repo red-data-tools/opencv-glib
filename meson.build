@@ -34,6 +34,7 @@ tag_message = '@0@ @1@ has been released!!!'.format(meson.project_name(),
 tag = custom_target('tag',
                     command: [
                       'git',
+                      '-C', meson.source_root(),
                       'tag',
                       '-a',
                       '-m', tag_message,
@@ -42,7 +43,12 @@ tag = custom_target('tag',
                     output: ['tag'])
 
 tag_push = custom_target('tag-push',
-                         command: ['git', 'push', '--tags'],
+                         command: [
+                           'git',
+                           '-C', meson.source_root(),
+                           'push',
+                           '--tags',
+                         ],
                          depends: [tag],
                          output: ['tag-push'])
 
