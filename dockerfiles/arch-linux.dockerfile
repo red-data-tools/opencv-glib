@@ -4,6 +4,7 @@ RUN \
   pacman --sync --noconfirm --refresh && \
   pacman --sync --noconfirm \
     gcc \
+    git \
     glew \
     gobject-introspection \
     hdf5 \
