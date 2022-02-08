@@ -11,7 +11,9 @@ jobs:
         target:
           - arch-linux
           - fedora-latest
+          - ubuntu-20.04
           - ubuntu-18.04
+          - debian-11
           - debian-10
     runs-on: ubuntu-latest
     steps:
