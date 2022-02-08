@@ -4,6 +4,7 @@ RUN \
   dnf install -y \
     gcc \
     gcc-c++ \
+    git \
     gobject-introspection-devel \
     make \
     meson \
