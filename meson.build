@@ -1,5 +1,5 @@
 project('opencv-glib', 'c', 'cpp',
-        version: '1.0.3',
+        version: '1.0.4',
         license: 'BSD-3-Clause',
         default_options: [
           'cpp_std=c++11',
