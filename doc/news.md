@@ -1,5 +1,28 @@
 # News
 
+## 1.0.3: 2021-02-09 {#version-1-0-3}
+
+Adding support for `opencv4` package release.
+
+### Improvements
+
+  * `gcv_image_abs_diff()`: Add.
+
+  * `gcv_image_draw_ellipse_point()`: Add.
+    [GitHub#6][Patch by wagavulin]
+
+  * `GCVSize`: Add.
+    [GitHub#6][Patch by wagavulin]
+
+  * `gcv_rectangle_clip_line()`: Add.
+    [GitHub#7][Patch by wagavulin]
+
+  * Add support Ubuntu 20.04.
+
+### Thanks
+
+  * wagavulin
+
 ## 1.0.2: 2019-09-06 {#version-1-0-2}
 
 More drawing functions release.
