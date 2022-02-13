@@ -7,6 +7,7 @@
 #include <opencv-glib/size.hpp>
 
 #include <opencv2/imgproc.hpp>
+#include <vector>
 
 G_BEGIN_DECLS
 
@@ -658,6 +659,65 @@ gcv_image_abs_diff(GCVImage *image,
   return gcv_image_new_raw(&cv_output);
 }
 
+/**
+ * gcv_image_split:
+ * @image: A #GCVImage.
+ *
+ * It splits image. The splitted image is returned as
+ * a new matrix.
+ *
+ * Returns: (element-type GCVImage) (transfer full):
+ *   The list of #GCVImage
+ *
+ * Since: 1.0.4
+ */
+GList *
+gcv_image_split(GCVImage *image)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  std::vector<cv::Mat> planes;
+  GList *values = NULL;
+  int i;
+
+  cv::split(*cv_image,planes);
+
+  // TODO. get number of channels instead of 3
+  for( i = 0 ; i < 3 ; i++ ){
+    values = g_list_prepend(values,&planes[i]);
+  }
+  values = g_list_prepend(values, NULL);
+
+  return g_list_reverse(values);
+/*
+  cv::imwrite("/tmp/b.jpg",planes[0]);
+  cv::imwrite("/tmp/g.jpg",planes[1]);
+  cv::imwrite("/tmp/r.jpg",planes[2]);
+*/
+}
+
+/**
+ * gcv_image_median_blur:
+ * @image: A #GCVImage.
+ *
+ * It effects median blur image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_median_blur(GCVImage *image)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  // TODO: * Use the arguments instead of static number.
+  //       * Change blur instead of medianBlur.
+  cv::medianBlur(*cv_image, *cv_converted_image, 3);
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
 G_END_DECLS
 
 GCVImage *
@@ -668,3 +728,4 @@ gcv_image_new_raw(std::shared_ptr<cv::Mat> *cv_matrix)
                              NULL);
   return GCV_IMAGE(matrix);
 }
+
