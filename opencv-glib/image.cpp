@@ -675,24 +675,17 @@ GList *
 gcv_image_split(GCVImage *image)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
-  std::vector<cv::Mat> planes;
+  std::vector<cv::Mat> cv_splitted_images;
   GList *values = NULL;
-  int i;
 
-  cv::split(*cv_image,planes);
-
-  // TODO. get number of channels instead of 3
-  for( i = 0 ; i < 3 ; i++ ){
-    values = g_list_prepend(values,&planes[i]);
+  cv::split(*cv_image, cv_splitted_images);
+  for (const auto &cv_splitted_image : cv_splitted_images) {
+    auto cv_shared_splitted_image = std::make_shared<cv::Mat>(cv_splitted_image);
+    auto splitted_image = gcv_image_new_raw(&cv_shared_splitted_image);
+    values = g_list_prepend(values, splitted_image);
   }
-  values = g_list_prepend(values, NULL);
 
   return g_list_reverse(values);
-/*
-  cv::imwrite("/tmp/b.jpg",planes[0]);
-  cv::imwrite("/tmp/g.jpg",planes[1]);
-  cv::imwrite("/tmp/r.jpg",planes[2]);
-*/
 }
 
 /**

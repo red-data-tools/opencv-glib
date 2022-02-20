@@ -323,5 +323,21 @@ class TestImage < Test::Unit::TestCase
       assert_equal(expected.bytes.to_s,
                    @image.abs_diff(lined_image).bytes.to_s)
     end
+
+    def test_split
+      spliited_data = @image.bytes.to_s.each_char.group_by.with_index do |_, i|
+        i % 4
+      end
+      splitted_image_data = @image.split.collect do |splitted_image|
+        splitted_image.bytes.to_s
+      end
+      assert_equal([
+                     spliited_data[0].join(""),
+                     spliited_data[1].join(""),
+                     spliited_data[2].join(""),
+                     spliited_data[3].join(""),
+                   ],
+                   splitted_image_data)
+    end
   end
 end
