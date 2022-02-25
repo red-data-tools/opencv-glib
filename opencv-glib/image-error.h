@@ -18,6 +18,7 @@ typedef enum {
   GCV_IMAGE_ERROR_READ,
   GCV_IMAGE_ERROR_WRITE,
   GCV_IMAGE_ERROR_UNKNOWN,
+  GCV_IMAGE_ERROR_FILTER,
 } GCVImageError;
 
 #define GCV_IMAGE_ERROR (gcv_image_error_quark())

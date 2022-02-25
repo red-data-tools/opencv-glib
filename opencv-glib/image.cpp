@@ -691,6 +691,8 @@ gcv_image_split(GCVImage *image)
 /**
  * gcv_image_median_blur:
  * @image: A #GCVImage.
+ * @ksize: Aperture linear size; it must be odd and greater than 1
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects median blur image. The converted image is returned as
  * a new image.
@@ -699,14 +701,22 @@ gcv_image_split(GCVImage *image)
  *
  * Since: 1.0.4
  */
-GCVImage *gcv_image_median_blur(GCVImage *image)
+GCVImage *gcv_image_median_blur(GCVImage *image,
+                                gint ksize,
+                                GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
   auto cv_converted_image = std::make_shared<cv::Mat>();
 
-  // TODO: * Use the arguments instead of static number.
-  //       * Change blur instead of medianBlur.
-  cv::medianBlur(*cv_image, *cv_converted_image, 3);
+  if (ksize % 2 == 0 || ksize < 1) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "ksize must be odd and greater than 1");
+    return NULL;
+  }
+
+  cv::medianBlur(*cv_image, *cv_converted_image, ksize);
 
   return gcv_image_new_raw(&cv_converted_image);
 }
