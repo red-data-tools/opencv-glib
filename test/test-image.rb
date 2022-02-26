@@ -346,12 +346,12 @@ class TestImage < Test::Unit::TestCase
                        blur_image.bytes.to_s)
     end
 
-    def test_median_blur_invalid_argument
-      # ksize must be odd and greater than 1
-      [-1,0,2].each do |n|
-        assert_raise(CV::ImageError::Filter) do
-          @image.median_blur(n)
-        end
+    data(:ksize, [-1, 0, 2])
+    def test_median_blur_invalid_argument(data)
+      ksize = data[:ksize]
+      message = "ksize must be odd and greater than 1: <#{ksize}>"
+      assert_raise(CV::ImageError::Filter.new(message)) do
+        @image.median_blur(ksize)
       end
     end
   end

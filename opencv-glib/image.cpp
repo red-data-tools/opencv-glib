@@ -712,7 +712,8 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
     g_set_error(error,
                 GCV_IMAGE_ERROR,
                 GCV_IMAGE_ERROR_FILTER,
-                "ksize must be odd and greater than 1");
+                "ksize must be odd and greater than 1: <%d>",
+                ksize);
     return NULL;
   }
 
