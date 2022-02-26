@@ -201,6 +201,274 @@ gcv_drawing_options_new(void)
   return GCV_DRAWING_OPTIONS(g_object_new(GCV_TYPE_DRAWING_OPTIONS, NULL));
 }
 
+/*************************************/
+
+typedef struct {
+  gboolean normalize;
+// const Scalar &borderValue=morphologyDefaultBorderValue()
+// const Size &dstsize=Size()
+  gdouble delta;
+  gdouble psi;
+  gdouble scale;
+  gdouble sigma_y;
+  gint border_type;
+  gint iterations;
+  gint ksize;
+//  gint ktype;
+  gint max_level;
+  GCVPoint anchor;
+// TermCriteria termcrit=TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 5, 1)
+} GCVImageFilteringOptionsPrivate;
+
+G_DEFINE_TYPE_WITH_PRIVATE(GCVImageFilteringOptions,
+                           gcv_image_filtering_options,
+                           G_TYPE_OBJECT)
+
+#define GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object) \
+  static_cast<GCVImageFilteringOptionsPrivate *>(      \
+    gcv_image_filtering_options_get_instance_private(   \
+      GCV_IMAGE_FILTERING_OPTIONS(object)))
+
+// TODO
+enum {
+  PROP_NORMALIZE = 1,
+  PROP_BORDER_VALUE,
+  PROP_DSTSIZE,
+  PROP_DELTA,
+  PROP_PSI,
+  PROP_SCALE,
+  PROP_SIGMA_Y,
+  PROP_BORDER_TYPE,
+  PROP_ITERATIONS,
+  PROP_KSIZE,
+  PROP_KTYPE,
+  PROP_MAX_LEVEL,
+  PROP_ANCHOR,
+};
+
+static void
+gcv_image_filtering_options_get_property(GObject *object,
+                                 guint prop_id,
+                                 GValue *value,
+                                 GParamSpec *pspec)
+{
+  auto priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object);
+
+  switch (prop_id) {
+  case PROP_NORMALIZE:
+    g_value_set_boolean(value, priv->normalize);
+    break;
+/* TODO
+  case PROP_BORDER_VALUE:
+    g_value_set_XXX(value, priv->border_value);
+    break;
+  case PROP_DSTSIZE:
+    g_value_set_XXX(value, priv->dstsize);
+    break;
+*/
+  case PROP_DELTA:
+    g_value_set_double(value, priv->delta);
+    break;
+  case PROP_PSI:
+    g_value_set_double(value, priv->psi);
+    break;
+  case PROP_SCALE:
+    g_value_set_double(value, priv->scale);
+    break;
+  case PROP_SIGMA_Y:
+    g_value_set_double(value, priv->sigma_y);
+    break;
+  case PROP_BORDER_TYPE:
+    g_value_set_enum(value, priv->border_type);
+    break;
+  case PROP_ITERATIONS:
+    g_value_set_int(value, priv->iterations);
+    break;
+  case PROP_KSIZE:
+    g_value_set_int(value, priv->ksize);
+    break;
+/*
+  case PROP_KTYPE:
+    g_value_set_int(value, priv->ktype);
+    break;
+*/
+  case PROP_MAX_LEVEL:
+    g_value_set_int(value, priv->max_level);
+    break;
+/*
+  case PROP_ANCHOR:
+    g_value_set_XXX(value, priv->anchor);
+    break;
+*/
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    break;
+  }
+
+}
+
+static void
+gcv_image_filtering_options_set_property(GObject *object,
+                                 guint prop_id,
+                                 const GValue *value,
+                                 GParamSpec *pspec)
+{
+  auto priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object);
+
+  switch (prop_id) {
+  case PROP_NORMALIZE:
+    priv->normalize = g_value_get_boolean(value);
+    break;
+/* TODO
+  case PROP_BORDER_VALUE:
+    priv->border_value = g_value_get_XXX(value);
+    break;
+  case PROP_DSTSIZE:
+    priv->dstsize = g_value_get_XXX(value);
+    break;
+*/
+  case PROP_DELTA:
+    priv->delta = g_value_get_double(value);
+    break;
+  case PROP_PSI:
+    priv->psi = g_value_get_double(value);
+    break;
+  case PROP_SCALE:
+    priv->scale = g_value_get_double(value);
+    break;
+  case PROP_SIGMA_Y:
+    priv->sigma_y = g_value_get_double(value);
+    break;
+  case PROP_BORDER_TYPE:
+    priv->border_type = static_cast<GCVBorderType>(g_value_get_enum(value));
+    break;
+  case PROP_ITERATIONS:
+    priv->iterations = g_value_get_int(value);
+    break;
+  case PROP_KSIZE:
+    priv->ksize = g_value_get_int(value);
+    break;
+/*
+  case PROP_KTYPE:
+    priv->ktype = g_value_get_int(value);
+    break;
+*/
+  case PROP_MAX_LEVEL:
+    priv->max_level = g_value_get_int(value);
+    break;
+/*
+  case PROP_ANCHOR:
+    priv->anchor = g_value_get_XXX(value);
+    break;
+*/
+  default:
+    G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
+    break;
+  }
+}
+
+
+static void
+gcv_image_filtering_options_init(GCVImageFilteringOptions *object)
+{
+}
+
+static void
+gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
+{
+  GParamSpec *spec;
+
+  auto gobject_class = G_OBJECT_CLASS(klass);
+
+  gobject_class->get_property = gcv_image_filtering_options_get_property;
+  gobject_class->set_property = gcv_image_filtering_options_set_property;
+
+  spec = g_param_spec_double("delta",
+                             "Delta",
+                             "Delta TODO",
+                             0, G_MAXDOUBLE, 0,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_DELTA, spec);
+
+/*
+  spec = g_param_spec_double("psi",
+                             "Psi",
+                             "PSI TODO",
+                             0, G_MAXDOUBLE, cv::CV_PI * 0.5,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_PSI, spec);
+*/
+
+  spec = g_param_spec_double("scale",
+                             "Scale",
+                             "Scale TODO",
+                             0, G_MAXDOUBLE, 1.0,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_SCALE, spec);
+
+  spec = g_param_spec_double("sigmaY",
+                             "Sigma Y",
+                             "sigmaY TODO",
+                             0, G_MAXDOUBLE, 0.0,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                      G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_SIGMA_Y, spec);
+
+  spec = g_param_spec_enum("border-type",
+                           "Border type",
+                           "The type of border to be filter",
+                           GCV_TYPE_BORDER_TYPE,
+                           GCV_BORDER_TYPE_BORDER_DEFAULT,
+                           static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                    G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_BORDER_TYPE, spec);
+
+  spec = g_param_spec_int("iterations",
+                          "Iterations",
+                          "The number of iterations",
+                          0, G_MAXINT, 1,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_ITERATIONS, spec);
+
+  spec = g_param_spec_int("ksize",
+                          "Ksize",
+                          "KSize", // TODO
+                          0, G_MAXINT, 1, // TODO
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_KSIZE, spec);
+
+  spec = g_param_spec_int("max-level",
+                          "Max Level",
+                          "Max Level", // TODO
+                          0, G_MAXINT, 1,
+                          static_cast<GParamFlags>(G_PARAM_READWRITE |
+                                                   G_PARAM_CONSTRUCT));
+  g_object_class_install_property(gobject_class, PROP_MAX_LEVEL, spec);
+
+
+}
+
+/**
+ * gcv_image_filtering_options_new:
+ *
+ * Returns a newly created #GCVImageFilteringOptions.
+ *
+ * Since: 1.0.2
+ */
+GCVImageFilteringOptions *
+gcv_image_filtering_options_new(void)
+{
+  return GCV_IMAGE_FILTERING_OPTIONS(g_object_new(GCV_TYPE_IMAGE_FILTERING_OPTIONS,
+                                                  NULL));
+}
+
+/***************************** end *******************/
+
 G_DEFINE_TYPE(GCVImage, gcv_image, GCV_TYPE_MATRIX)
 
 static void
