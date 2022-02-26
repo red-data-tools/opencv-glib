@@ -732,4 +732,3 @@ gcv_image_new_raw(std::shared_ptr<cv::Mat> *cv_matrix)
                              NULL);
   return GCV_IMAGE(matrix);
 }
-
