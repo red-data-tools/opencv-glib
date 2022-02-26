@@ -9,6 +9,7 @@ G_BEGIN_DECLS
  * @GCV_IMAGE_ERROR_READ: Read error.
  * @GCV_IMAGE_ERROR_WRITE: Write error.
  * @GCV_IMAGE_ERROR_UNKNOWN: Unknown error.
+ * @GCV_IMAGE_ERROR_FILTER: Filter error.
  *
  * Image related errors.
  *
