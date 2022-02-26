@@ -353,6 +353,16 @@ class TestImage < Test::Unit::TestCase
       assert_raise(CV::ImageError::Filter.new(message)) do
         @image.median_blur(ksize)
       end
+
+    end
+    def test_image_filtering_options
+      options = CV::ImageFilteringOptions.new
+      options.delta
+      options.scale
+      options.iterations
+      options.max_level
+#      options.sigma_y
+p      options.border_type
     end
   end
 end

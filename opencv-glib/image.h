@@ -110,6 +110,60 @@ struct _GCVDrawingOptionsClass
 
 GCVDrawingOptions *gcv_drawing_options_new(void);
 
+/**********************************************/
+
+/**
+ * GCVBorderTypes:
+ * @GCV_BORDER_TYPE_BORDER_CONSTANT: See `cv::BorderTypes::BORDER_CONSTANT`.
+ * @GCV_BORDER_TYPE_BORDER_REPLICATE : See `cv::BorderTypes::BORDER_REPLICATE `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT : See `cv::BorderTypes::BORDER_REFLECT `.
+ * @GCV_BORDER_TYPE_BORDER_WRAP : See `cv::BorderTypes::BORDER_WRAP `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT_101 : See `cv::BorderTypes::BORDER_REFLECT_101 `.
+ * @GCV_BORDER_TYPE_BORDER_TRANSPARENT : See `cv::BorderTypes::BORDER_TRANSPARENT `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT101 : See `cv::BorderTypes::BORDER_REFLECT101 `.
+ * @GCV_BORDER_TYPE_BORDER_DEFAULT : See `cv::BorderTypes::BORDER_DEFAULT `.
+ * @GCV_BORDER_TYPE_BORDER_ISOLATED : See `cv::BorderTypes::BORDER_ISOLATED `.
+ *
+ * Line type for drawing functions corresponding to `cv::BorderTypes`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::border_types` document.
+ * But we can link to a specific version:
+ * [OpenCV `cv::border_types`]().
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_BORDER_TYPE_BORDER_CONSTANT = 0,
+  GCV_BORDER_TYPE_BORDER_REPLICATE = 1,
+  GCV_BORDER_TYPE_BORDER_REFLECT = 2,
+  GCV_BORDER_TYPE_BORDER_WRAP = 3,
+  GCV_BORDER_TYPE_BORDER_REFLECT_101 = 4,
+  GCV_BORDER_TYPE_BORDER_TRANSPARENT = 5,
+  GCV_BORDER_TYPE_BORDER_REFLECT101 = 6,
+  GCV_BORDER_TYPE_BORDER_DEFAULT = 7,
+  GCV_BORDER_TYPE_BORDER_ISOLATED = 8
+} GCVBorderType;
+
+#define GCV_TYPE_IMAGE_FILTERING_OPTIONS (gcv_image_filtering_options_get_type())
+G_DECLARE_DERIVABLE_TYPE(GCVImageFilteringOptions,
+                         gcv_image_filtering_options,
+                         GCV,
+                         IMAGE_FILTERING_OPTIONS,
+                         GObject)
+
+struct _GCVImageFilteringOptionsClass
+{
+  GObjectClass parent_class;
+};
+
+GCVImageFilteringOptions *gcv_image_filtering_options_new(void);
+
+
+/**********************************************/
+
+
 /**
  * GCVImageReadFlags:
  * @GCV_IMAGE_READ_FLAG_UNCHANGED: See `cv::IMREAD_UNCHANGED`.
@@ -143,7 +197,7 @@ GCVDrawingOptions *gcv_drawing_options_new(void);
  * But we can link to a specific version:
  * [OpenCV 3.4.1's `cv::ImreadModes`](https://docs.opencv.org/3.4.1/d4/da8/group__imgcodecs.html#ga61d9b0126a3e57d9277ac48327799c80).
  *
- * Since: 1.0.0
+ * Since: 1.0.4
  */
 typedef enum { /*< flags >*/
   GCV_IMAGE_READ_FLAG_UNCHANGED = -1,
