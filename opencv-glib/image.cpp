@@ -990,6 +990,40 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
   return gcv_image_new_raw(&cv_converted_image);
 }
 
+/**
+ * gcv_image_blur:
+ * @image: A #GCVImage.
+ * @ksize: A #GCVSize blurring kernel size.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * It effects blur image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_blur(GCVImage *image,
+                         GCVSize *ksize,
+                         GCVImageFilteringOptions *options,
+                         GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_ksize = gcv_size_get_raw(ksize);
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  if ( options != NULL ) {
+    auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+    
+    cv::blur(*cv_image, *cv_converted_image, *cv_ksize, NULL, options_priv->border_type);
+  } else {
+    cv::blur(*cv_image, *cv_converted_image, *cv_ksize);
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
 G_END_DECLS
 
 GCVImage *

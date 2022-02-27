@@ -364,5 +364,13 @@ class TestImage < Test::Unit::TestCase
 #      options.sigma_y
 p      options.border_type
     end
+
+    def test_blur
+      size = CV::Size.new(10, 8)
+      blur_image = @image.blur(size)
+      blur_image = @image.blur(size,CV::ImageFilteringOptions.new)
+      assert_not_equal(@image.bytes.to_s,
+                       blur_image.bytes.to_s)
+    end
   end
 end
