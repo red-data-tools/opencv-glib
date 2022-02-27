@@ -289,4 +289,8 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
                                 gint ksize,
                                 GError **error);
 
+GCVImage *gcv_image_blur(GCVImage *image,
+                                GCVSize *ksize,
+                                GCVImageFilteringOptions *options,
+                                GError **error);
 G_END_DECLS
