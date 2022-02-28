@@ -229,4 +229,10 @@ GCVImage *
 gcv_image_abs_diff(GCVImage *image,
                    GCVImage *other_image);
 
+GList *gcv_image_split(GCVImage *image);
+
+GCVImage *gcv_image_median_blur(GCVImage *image,
+                                gint ksize,
+                                GError **error);
+
 G_END_DECLS

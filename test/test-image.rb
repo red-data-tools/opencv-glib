@@ -323,5 +323,36 @@ class TestImage < Test::Unit::TestCase
       assert_equal(expected.bytes.to_s,
                    @image.abs_diff(lined_image).bytes.to_s)
     end
+
+    def test_split
+      spliited_data = @image.bytes.to_s.each_char.group_by.with_index do |_, i|
+        i % 4
+      end
+      splitted_image_data = @image.split.collect do |splitted_image|
+        splitted_image.bytes.to_s
+      end
+      assert_equal([
+                     spliited_data[0].join(""),
+                     spliited_data[1].join(""),
+                     spliited_data[2].join(""),
+                     spliited_data[3].join(""),
+                   ],
+                   splitted_image_data)
+    end
+
+    def test_median_blur
+      blur_image = @image.median_blur(7)
+      assert_not_equal(@image.bytes.to_s,
+                       blur_image.bytes.to_s)
+    end
+
+    data(:ksize, [-1, 0, 2])
+    def test_median_blur_invalid_argument(data)
+      ksize = data[:ksize]
+      message = "ksize must be odd and greater than 1: <#{ksize}>"
+      assert_raise(CV::ImageError::Filter.new(message)) do
+        @image.median_blur(ksize)
+      end
+    end
   end
 end

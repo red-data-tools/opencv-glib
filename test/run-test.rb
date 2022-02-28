@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 
 require "pathname"
+
+gem "test-unit"
 require "test-unit"
 
 base_dir = Pathname(__dir__).parent

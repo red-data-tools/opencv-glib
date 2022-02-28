@@ -7,6 +7,7 @@
 #include <opencv-glib/size.hpp>
 
 #include <opencv2/imgproc.hpp>
+#include <vector>
 
 G_BEGIN_DECLS
 
@@ -656,6 +657,69 @@ gcv_image_abs_diff(GCVImage *image,
   auto cv_output = std::make_shared<cv::Mat>();
   cv::absdiff(*cv_image, *cv_other_image, *cv_output);
   return gcv_image_new_raw(&cv_output);
+}
+
+/**
+ * gcv_image_split:
+ * @image: A #GCVImage.
+ *
+ * It splits image. The splitted image is returned as
+ * a new matrix.
+ *
+ * Returns: (element-type GCVImage) (transfer full):
+ *   The list of #GCVImage
+ *
+ * Since: 1.0.4
+ */
+GList *
+gcv_image_split(GCVImage *image)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  std::vector<cv::Mat> cv_splitted_images;
+  GList *values = NULL;
+
+  cv::split(*cv_image, cv_splitted_images);
+  for (const auto &cv_splitted_image : cv_splitted_images) {
+    auto cv_shared_splitted_image = std::make_shared<cv::Mat>(cv_splitted_image);
+    auto splitted_image = gcv_image_new_raw(&cv_shared_splitted_image);
+    values = g_list_prepend(values, splitted_image);
+  }
+
+  return g_list_reverse(values);
+}
+
+/**
+ * gcv_image_median_blur:
+ * @image: A #GCVImage.
+ * @ksize: Aperture linear size; it must be odd and greater than 1
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * It effects median blur image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_median_blur(GCVImage *image,
+                                gint ksize,
+                                GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  if (ksize % 2 == 0 || ksize < 1) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "ksize must be odd and greater than 1: <%d>",
+                ksize);
+    return NULL;
+  }
+
+  cv::medianBlur(*cv_image, *cv_converted_image, ksize);
+
+  return gcv_image_new_raw(&cv_converted_image);
 }
 
 G_END_DECLS
