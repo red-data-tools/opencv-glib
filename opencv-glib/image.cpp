@@ -394,10 +394,9 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
 
   spec = g_param_spec_double("delta",
                              "Delta",
-                             "Delta TODO",
+                             "added to the filtered pixels before storing them in dst.",
                              0, G_MAXDOUBLE, 0,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT));
+                             static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_DELTA, spec);
 
 /*
@@ -405,8 +404,7 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
                              "Psi",
                              "PSI TODO",
                              0, G_MAXDOUBLE, cv::CV_PI * 0.5,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT));
+                             static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_PSI, spec);
 */
 
@@ -414,16 +412,14 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
                              "Scale",
                              "Scale TODO",
                              0, G_MAXDOUBLE, 1.0,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT));
+                             static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_SCALE, spec);
 
   spec = g_param_spec_double("sigmaY",
                              "Sigma Y",
                              "sigmaY TODO",
                              0, G_MAXDOUBLE, 0.0,
-                             static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                      G_PARAM_CONSTRUCT));
+                             static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_SIGMA_Y, spec);
 
   spec = g_param_spec_enum("border-type",
@@ -431,32 +427,28 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
                            "The type of border to be filter",
                            GCV_TYPE_BORDER_TYPE,
                            GCV_BORDER_TYPE_BORDER_DEFAULT,
-                           static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                    G_PARAM_CONSTRUCT));
+                           static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_BORDER_TYPE, spec);
 
   spec = g_param_spec_int("iterations",
                           "Iterations",
                           "The number of iterations",
                           0, G_MAXINT, 1,
-                          static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_ITERATIONS, spec);
 
   spec = g_param_spec_int("ksize",
                           "Ksize",
                           "KSize", // TODO
                           0, G_MAXINT, 1, // TODO
-                          static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_KSIZE, spec);
 
   spec = g_param_spec_int("max-level",
                           "Max Level",
                           "Max Level", // TODO
                           0, G_MAXINT, 1,
-                          static_cast<GParamFlags>(G_PARAM_READWRITE |
-                                                   G_PARAM_CONSTRUCT));
+                          static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_MAX_LEVEL, spec);
 
   spec = g_param_spec_object("anchor",
@@ -1022,6 +1014,45 @@ GCVImage *gcv_image_blur(GCVImage *image,
                          GCVSize *ksize,
                          GCVImageFilteringOptions *options,
                          GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_ksize = gcv_size_get_raw(ksize);
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  if ( options != NULL ) {
+    auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+    
+    auto anchor = cv::Point(-1, -1);
+    if (options_priv->anchor) {
+      anchor = *gcv_point_get_raw(options_priv->anchor);
+    }
+    cv::blur(*cv_image, *cv_converted_image, *cv_ksize, anchor, options_priv->border_type);
+
+  } else {
+    cv::blur(*cv_image, *cv_converted_image, *cv_ksize);
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_laplacian:
+ * @image: A #GCVImage.
+ * @ddepth: Desired depth of the destination image.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * It effects laplacian image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_laplacian(GCVImage *image,
+                              int *ddepth,
+                              GCVImageFilteringOptions *options,
+                              GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
   auto cv_ksize = gcv_size_get_raw(ksize);
