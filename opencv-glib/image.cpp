@@ -216,7 +216,7 @@ typedef struct {
   gint ksize;
 //  gint ktype;
   gint max_level;
-  GCVPoint anchor;
+  GCVPoint *anchor;
 // TermCriteria termcrit=TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 5, 1)
 } GCVImageFilteringOptionsPrivate;
 
@@ -295,11 +295,9 @@ gcv_image_filtering_options_get_property(GObject *object,
   case PROP_MAX_LEVEL:
     g_value_set_int(value, priv->max_level);
     break;
-/*
   case PROP_ANCHOR:
-    g_value_set_XXX(value, priv->anchor);
+    g_value_set_object(value, priv->anchor);
     break;
-*/
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     break;
@@ -356,11 +354,22 @@ gcv_image_filtering_options_set_property(GObject *object,
   case PROP_MAX_LEVEL:
     priv->max_level = g_value_get_int(value);
     break;
-/*
   case PROP_ANCHOR:
-    priv->anchor = g_value_get_XXX(value);
+    {
+      auto anchor = g_value_get_object(value);
+      if (priv->anchor && priv->anchor == anchor) {
+        break;
+      }
+      if (priv->anchor) {
+        g_object_unref(priv->anchor);
+      }
+      if (anchor) {
+        priv->anchor = GCV_POINT(g_object_ref(anchor));
+      } else {
+        priv->anchor = NULL;
+      }
+    }
     break;
-*/
   default:
     G_OBJECT_WARN_INVALID_PROPERTY_ID(object, prop_id, pspec);
     break;
@@ -450,7 +459,12 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
                                                    G_PARAM_CONSTRUCT));
   g_object_class_install_property(gobject_class, PROP_MAX_LEVEL, spec);
 
-
+  spec = g_param_spec_object("anchor",
+                             "Anchor",
+                             "Anchor", // TODO
+                             GCV_TYPE_POINT,
+                             static_cast<GParamFlags>(G_PARAM_READWRITE));
+  g_object_class_install_property(gobject_class, PROP_ANCHOR, spec);
 }
 
 /**
@@ -1016,7 +1030,12 @@ GCVImage *gcv_image_blur(GCVImage *image,
   if ( options != NULL ) {
     auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
     
-    cv::blur(*cv_image, *cv_converted_image, *cv_ksize, NULL, options_priv->border_type);
+    auto anchor = cv::Point(-1, -1);
+    if (options_priv->anchor) {
+      anchor = *gcv_point_get_raw(options_priv->anchor);
+    }
+    cv::blur(*cv_image, *cv_converted_image, *cv_ksize, anchor, options_priv->border_type);
+
   } else {
     cv::blur(*cv_image, *cv_converted_image, *cv_ksize);
   }
