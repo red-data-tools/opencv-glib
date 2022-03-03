@@ -1021,7 +1021,7 @@ GCVImage *gcv_image_blur(GCVImage *image,
 
   if ( options != NULL ) {
     auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
-    
+
     auto anchor = cv::Point(-1, -1);
     if (options_priv->anchor) {
       anchor = *gcv_point_get_raw(options_priv->anchor);
@@ -1040,7 +1040,6 @@ GCVImage *gcv_image_blur(GCVImage *image,
  * @image: A #GCVImage.
  * @ddepth: Desired depth of the destination image.
  * @options: (nullable): A #GCVImageFilteringOptions;
- * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects laplacian image. The converted image is returned as
  * a new image.
@@ -1050,25 +1049,23 @@ GCVImage *gcv_image_blur(GCVImage *image,
  * Since: 1.0.4
  */
 GCVImage *gcv_image_laplacian(GCVImage *image,
-                              int *ddepth,
-                              GCVImageFilteringOptions *options,
-                              GError **error)
+                              int ddepth,
+                              GCVImageFilteringOptions *options)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
-  auto cv_ksize = gcv_size_get_raw(ksize);
   auto cv_converted_image = std::make_shared<cv::Mat>();
 
   if ( options != NULL ) {
     auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
-    
-    auto anchor = cv::Point(-1, -1);
-    if (options_priv->anchor) {
-      anchor = *gcv_point_get_raw(options_priv->anchor);
-    }
-    cv::blur(*cv_image, *cv_converted_image, *cv_ksize, anchor, options_priv->border_type);
+    int    ksize       = options_priv->ksize;
+    double scale       = options_priv->scale;
+    double delta       = options_priv->delta;
+    int    border_type = options_priv->border_type;
+    cv::Laplacian(*cv_image, *cv_converted_image,
+                  ddepth, ksize, scale, delta, border_type);
 
   } else {
-    cv::blur(*cv_image, *cv_converted_image, *cv_ksize);
+    cv::Laplacian(*cv_image, *cv_converted_image, ddepth);
   }
 
   return gcv_image_new_raw(&cv_converted_image);

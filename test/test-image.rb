@@ -372,5 +372,16 @@ p      options.border_type
       assert_not_equal(@image.bytes.to_s,
                        blur_image.bytes.to_s)
     end
+
+    def test_laplacian
+      ddepth = 5
+      filtered_image = @image.laplacian(ddepth)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      filtered_image = @image.blur(size,CV::ImageFilteringOptions.new)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
   end
 end

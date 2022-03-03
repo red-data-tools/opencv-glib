@@ -293,4 +293,8 @@ GCVImage *gcv_image_blur(GCVImage *image,
                                 GCVSize *ksize,
                                 GCVImageFilteringOptions *options,
                                 GError **error);
+
+GCVImage *gcv_image_laplacian(GCVImage *image,
+                              int ddepth,
+                              GCVImageFilteringOptions *options);
 G_END_DECLS
