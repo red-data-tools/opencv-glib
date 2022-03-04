@@ -25,4 +25,10 @@ for module in ${modules}; do
   fi
 done
 
-${GDB} ruby ${test_dir}/run-test.rb "$@"
+if rbenv version > /dev/null 2>&1; then
+  ruby=$(rbenv which ruby)
+else
+  ruby=ruby
+fi
+
+${GDB} ${ruby} ${test_dir}/run-test.rb "$@"
