@@ -13,7 +13,9 @@ for module in ${modules}; do
   module_build_dir="${build_dir}/${module}"
   if [ -d "${module_build_dir}" ]; then
     LD_LIBRARY_PATH="${module_build_dir}:${LD_LIBRARY_PATH}"
+    DYLD_LIBRARY_PATH="${module_build_dir}:${DYLD_LIBRARY_PATH}"
     export LD_LIBRARY_PATH
+    export DYLD_LIBRARY_PATH
   fi
 
   module_typelib_dir="${build_dir}/${module}"
@@ -23,4 +25,10 @@ for module in ${modules}; do
   fi
 done
 
-${GDB} ruby ${test_dir}/run-test.rb "$@"
+if rbenv version > /dev/null 2>&1; then
+  ruby=$(rbenv which ruby)
+else
+  ruby=ruby
+fi
+
+${GDB} ${ruby} ${test_dir}/run-test.rb "$@"
