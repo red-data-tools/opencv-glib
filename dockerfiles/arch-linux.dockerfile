@@ -3,15 +3,20 @@ FROM archlinux
 RUN \
   pacman --sync --noconfirm --refresh && \
   pacman --sync --noconfirm \
+    fmt \
     gcc \
     git \
     glew \
     gobject-introspection \
     hdf5 \
+    jack2 \
+    jsoncpp \
     make \
     meson \
     opencv \
+    openmpi \
     pkg-config \
+    pugixml \
     qt5 \
     ruby \
     sudo \
