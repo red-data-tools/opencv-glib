@@ -379,9 +379,41 @@ p      options.border_type
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
 
-      filtered_image = @image.blur(size,CV::ImageFilteringOptions.new)
+      options = CV::ImageFilteringOptions.new
+      options.ksize = 1
+#      options.ksize = 0
+      filtered_image = @image.laplacian(ddepth,options)
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
+    end
+
+    def test_filter2d
+      ddepth = -1
+      filtered_image = @image.filter2d(ddepth,@image)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilteringOptions.new
+      options.ksize = 1
+#      options.ksize = 0
+      filtered_image = @image.filter2d(ddepth,@image,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
+
+    def test_sobel
+      ddepth = 5
+      filtered_image = @image.sobel(ddepth,1,1)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilteringOptions.new
+      #
+      options.ksize = 3
+      filtered_image = @image.sobel(ddepth,1,1,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
     end
   end
 end

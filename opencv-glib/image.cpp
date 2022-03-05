@@ -963,6 +963,56 @@ gcv_image_split(GCVImage *image)
 }
 
 /**
+ * gcv_image_bilateral_filter:
+ * @image: A #GCVImage.
+ * @d: Diameter of each pixel neighborhood that is used during filtering. If it is non-positive, it is computed from sigmaSpace.
+ * @sigma_color: Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color.
+ * @sigma_space: Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d>0, it specifies the neighborhood size regardless of sigmaSpace. Otherwise, d is proportional to sigmaSpace.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * It effects bilateral filter image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_bilateral_filter(GCVImage *image,
+                                     int d,
+                                     double sigma_color,
+                                     double sigma_space,
+                                     GCVImageFilteringOptions *options,
+                                     GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int  border_type = options_priv->border_type;
+
+      cv::bilateralFilter(*cv_image, *cv_converted_image,
+                    d, sigma_color, sigma_space, border_type);
+    } else {
+      cv::bilateralFilter(*cv_image, *cv_converted_image,
+                    d, sigma_color, sigma_space);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
  * gcv_image_median_blur:
  * @image: A #GCVImage.
  * @ksize: Aperture linear size; it must be odd and greater than 1
@@ -1036,10 +1086,216 @@ GCVImage *gcv_image_blur(GCVImage *image,
 }
 
 /**
+ * gcv_image_box_filter:
+ * @image: A #GCVImage.
+ * @ddepth: the output image depth
+ * @ksize: blurring kernel size.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * HOGE
+ * It effects box filter image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_box_filter(GCVImage *image,
+                               int ddepth,
+                               GCVSize *ksize,
+                               GCVImageFilteringOptions *options,
+                               GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_ksize = gcv_size_get_raw(ksize);
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      bool normalize = true;
+      int  border_type = options_priv->border_type;
+      auto anchor = cv::Point(-1,-1);
+      if (options_priv->anchor) {
+        anchor = *gcv_point_get_raw(options_priv->anchor);
+      }
+      cv::boxFilter(*cv_image, *cv_converted_image, ddepth,
+                    *cv_ksize, anchor, normalize, border_type);
+    } else {
+      cv::boxFilter(*cv_image, *cv_converted_image, ddepth, *cv_ksize);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_build_pyramid:
+ * @image: A #GCVImage.
+ * @max_level: 0-based index of the last (the smallest) pyramid layer. It must be non-negative.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * Constructs the Gaussian pyramid for an image
+ * The converted image is returned as a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_build_pyramid(GCVImage *image,
+                                  int max_level,
+                                  GCVImageFilteringOptions *options,
+                                  GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int  border_type = options_priv->border_type;
+
+      cv::buildPyramid(*cv_image, *cv_converted_image,
+                       max_level, border_type);
+    } else {
+      cv::buildPyramid(*cv_image, *cv_converted_image,max_level);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+
+/**
+ * gcv_image_dilate:
+ * @image: A #GCVImage.
+ * @kernel: structuring element used for dilation.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * Constructs the dilate filter for an image
+ * The converted image is returned as a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+/*
+GCVImage *gcv_image_dilate(GCVImage *image,
+                           GCVMatrix *kernel,
+                           GCVImageFilteringOptions *options,
+                           GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_kernel = gcv_matrix_get_raw(GCV_MATRIX(kernel));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int  iteration = options_priv->iteration;
+      int  border_type = options_priv->border_type;
+
+      auto anchor = cv::Point(-1,-1);
+      if (options_priv->anchor) {
+        anchor = *gcv_point_get_raw(options_priv->anchor);
+      }
+
+      cv::dilate(*cv_image, *cv_converted_image, *cv_kernel,
+                 anchor, iteration, border_type);
+    } else {
+      cv::dilate(*cv_image, *cv_converted_image, *cv_kernel);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+*/
+
+/**
+ * gcv_image_filter2d:
+ * @image: A #GCVImage.
+ * @ddepth: desired depth of the destination image, see combinations.
+ * @kernel: convolution kernel (or rather a correlation kernel), a single-channel floating point matrix; if you want to apply different kernels to different channels, split the image into separate color planes using split and process them individually.
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * Constructs the dilate filter for an image
+ * The converted image is returned as a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_filter2d(GCVImage *image,
+                             int ddepth,
+                             GCVMatrix *kernel,
+                             GCVImageFilteringOptions *options,
+                             GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_kernel = gcv_matrix_get_raw(GCV_MATRIX(kernel));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int  delta = options_priv->delta;
+      int  border_type = options_priv->border_type;
+      auto anchor = cv::Point(-1,-1);
+
+      if (options_priv->anchor) {
+        anchor = *gcv_point_get_raw(options_priv->anchor);
+      }
+
+      cv::filter2D(*cv_image, *cv_converted_image, ddepth, *cv_kernel,
+                 anchor, delta, border_type);
+    } else {
+      cv::filter2D(*cv_image, *cv_converted_image, ddepth, *cv_kernel);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
  * gcv_image_laplacian:
  * @image: A #GCVImage.
  * @ddepth: Desired depth of the destination image.
  * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects laplacian image. The converted image is returned as
  * a new image.
@@ -1050,22 +1306,84 @@ GCVImage *gcv_image_blur(GCVImage *image,
  */
 GCVImage *gcv_image_laplacian(GCVImage *image,
                               int ddepth,
-                              GCVImageFilteringOptions *options)
+                              GCVImageFilteringOptions *options,
+                              GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
   auto cv_converted_image = std::make_shared<cv::Mat>();
 
-  if ( options != NULL ) {
-    auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
-    int    ksize       = options_priv->ksize;
-    double scale       = options_priv->scale;
-    double delta       = options_priv->delta;
-    int    border_type = options_priv->border_type;
-    cv::Laplacian(*cv_image, *cv_converted_image,
-                  ddepth, ksize, scale, delta, border_type);
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int    ksize       = options_priv->ksize;
+      double scale       = options_priv->scale;
+      double delta       = options_priv->delta;
+      int    border_type = options_priv->border_type;
 
-  } else {
-    cv::Laplacian(*cv_image, *cv_converted_image, ddepth);
+      cv::Laplacian(*cv_image, *cv_converted_image,
+                    ddepth, ksize, scale, delta, border_type);
+    } else {
+      cv::Laplacian(*cv_image, *cv_converted_image, ddepth);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_sobel:
+ * @image: A #GCVImage.
+ * @ddepth: Desired depth of the destination image.
+ * @intx: Order of the derivative x
+ * @inty: Order of the derivative y
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * It effects sobel image. The converted image is returned as
+ * a new image.
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_sobel(GCVImage *image,
+                          int ddepth,
+                          int intx,
+                          int inty,
+                          GCVImageFilteringOptions *options,
+                          GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      int    ksize       = options_priv->ksize;
+      double scale       = options_priv->scale;
+      double delta       = options_priv->delta;
+      int    border_type = options_priv->border_type;
+
+      cv::Sobel(*cv_image, *cv_converted_image,
+                ddepth, intx, inty, ksize, scale, delta, border_type);
+
+    } else {
+      cv::Sobel(*cv_image, *cv_converted_image, ddepth, intx, inty);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
   }
 
   return gcv_image_new_raw(&cv_converted_image);

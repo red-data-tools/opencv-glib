@@ -285,6 +285,25 @@ gcv_image_abs_diff(GCVImage *image,
 
 GList *gcv_image_split(GCVImage *image);
 
+GCVImage *gcv_image_bilateral_filter(GCVImage *image,
+                                     int d,
+                                     double sigma_color,
+                                     double sigma_space,
+                                     GCVImageFilteringOptions *options,
+                                     GError **error);
+
+GCVImage *gcv_image_box_filter(GCVImage *image,
+                               int ddepth,
+                               GCVSize *ksize,
+                               GCVImageFilteringOptions *options,
+                               GError **error);
+
+GCVImage *gcv_image_filter2d(GCVImage *image,
+                             int ddepth,
+                             GCVMatrix *kernel,
+                             GCVImageFilteringOptions *options,
+                             GError **error);
+
 GCVImage *gcv_image_median_blur(GCVImage *image,
                                 gint ksize,
                                 GError **error);
@@ -294,7 +313,20 @@ GCVImage *gcv_image_blur(GCVImage *image,
                                 GCVImageFilteringOptions *options,
                                 GError **error);
 
+GCVImage *gcv_image_build_pyramid(GCVImage *image,
+                                  int max_level,
+                                  GCVImageFilteringOptions *options,
+                                  GError **error);
+
 GCVImage *gcv_image_laplacian(GCVImage *image,
                               int ddepth,
-                              GCVImageFilteringOptions *options);
+                              GCVImageFilteringOptions *options,
+                              GError **error);
+
+GCVImage *gcv_image_sobel(GCVImage *image,
+                          int ddepth,
+                          int intx,
+                          int inty,
+                          GCVImageFilteringOptions *options,
+                          GError **error);
 G_END_DECLS
