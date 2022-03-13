@@ -363,6 +363,8 @@ class TestImage < Test::Unit::TestCase
       options.max_level
 #      options.sigma_y
 p      options.border_type
+      options.ktype
+      #options.normalize
     end
 
     def test_blur
@@ -372,6 +374,24 @@ p      options.border_type
       assert_not_equal(@image.bytes.to_s,
                        blur_image.bytes.to_s)
     end
+
+=begin
+    def test_get_deriv_kernels
+      dx = 2
+      dy = 2
+      ksize = 3
+      filtered_image = @image.get_deriv_kernels(dx,dy,ksize)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilteringOptions.new
+      options.ktype = 6
+      options.normalize = true
+      filtered_image = @image.get_deriv_kernels(dx,dy,ksize,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
+=end
 
     def test_laplacian
       ddepth = 5

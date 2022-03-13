@@ -214,7 +214,8 @@ typedef struct {
   gint border_type;
   gint iterations;
   gint ksize;
-//  gint ktype;
+  GCVKType ktype;
+  //gint ktype;
   gint max_level;
   GCVPoint *anchor;
 // TermCriteria termcrit=TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 5, 1)
@@ -287,11 +288,9 @@ gcv_image_filtering_options_get_property(GObject *object,
   case PROP_KSIZE:
     g_value_set_int(value, priv->ksize);
     break;
-/*
   case PROP_KTYPE:
-    g_value_set_int(value, priv->ktype);
+    g_value_set_enum(value, priv->ktype);
     break;
-*/
   case PROP_MAX_LEVEL:
     g_value_set_int(value, priv->max_level);
     break;
@@ -346,11 +345,9 @@ gcv_image_filtering_options_set_property(GObject *object,
   case PROP_KSIZE:
     priv->ksize = g_value_get_int(value);
     break;
-/*
   case PROP_KTYPE:
-    priv->ktype = g_value_get_int(value);
+    priv->ktype = static_cast<GCVKType>(g_value_get_enum(value));
     break;
-*/
   case PROP_MAX_LEVEL:
     priv->max_level = g_value_get_int(value);
     break;
@@ -391,6 +388,13 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
 
   gobject_class->get_property = gcv_image_filtering_options_get_property;
   gobject_class->set_property = gcv_image_filtering_options_set_property;
+
+  spec = g_param_spec_boolean("normalize",
+                              "Normalize",
+                              "normalize", // TODO
+                              FALSE,
+                              static_cast<GParamFlags>(G_PARAM_READWRITE));
+  g_object_class_install_property(gobject_class, PROP_NORMALIZE, spec);
 
   spec = g_param_spec_double("delta",
                              "Delta",
@@ -443,6 +447,13 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
                           0, G_MAXINT, 1, // TODO
                           static_cast<GParamFlags>(G_PARAM_READWRITE));
   g_object_class_install_property(gobject_class, PROP_KSIZE, spec);
+
+  spec = g_param_spec_enum("ktype",
+                           "Ktype",
+                           "KType", // TODO
+                           GCV_TYPE_KTYPE, GCV_KTYPE_CV32F, // TODO
+                           static_cast<GParamFlags>(G_PARAM_READWRITE));
+  g_object_class_install_property(gobject_class, PROP_KTYPE, spec);
 
   spec = g_param_spec_int("max-level",
                           "Max Level",
@@ -1277,6 +1288,55 @@ GCVImage *gcv_image_filter2d(GCVImage *image,
                  anchor, delta, border_type);
     } else {
       cv::filter2D(*cv_image, *cv_converted_image, ddepth, *cv_kernel);
+    }
+  } catch (const cv::Exception &exception) {
+    g_set_error(error,
+                GCV_IMAGE_ERROR,
+                GCV_IMAGE_ERROR_FILTER,
+                "Failed to filter image: %s",
+                exception.what());
+    return NULL;
+  }
+
+  return gcv_image_new_raw(&cv_converted_image);
+}
+
+/**
+ * gcv_image_get_deriv_kernels:
+ * @image: A #GCVImage.
+ * @dx: TODO
+ * @dy: TODO
+ * @ksize: TODO
+ * @options: (nullable): A #GCVImageFilteringOptions;
+ * @error: (nullable): Return locatipcn for a #GError or %NULL.
+ *
+ * TODO
+ *
+ * Returns: (transfer full): A converted #GCVImage.
+ *
+ * Since: 1.0.4
+ */
+GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
+                                      int dx,
+                                      int dy,
+                                      int ksize,
+                                      GCVImageFilteringOptions *options,
+                                      GError **error)
+{
+  auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
+  auto cv_converted_image = std::make_shared<cv::Mat>();
+
+  try {
+    if ( options != NULL ) {
+      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      GCVKType  ktype = options_priv->ktype;
+      gboolean normalize = options_priv->normalize;
+printf("ktype: %d\n",ktype);
+
+      cv::getDerivKernels(*cv_image, *cv_converted_image, dx, dy, ksize,
+                 normalize, ktype);
+    } else {
+      cv::getDerivKernels(*cv_image, *cv_converted_image, dx, dy, ksize);
     }
   } catch (const cv::Exception &exception) {
     g_set_error(error,

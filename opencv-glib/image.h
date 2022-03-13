@@ -160,6 +160,28 @@ struct _GCVImageFilteringOptionsClass
 
 GCVImageFilteringOptions *gcv_image_filtering_options_new(void);
 
+/** 
+ * GCVKrType:
+ * @GCV_KTYPE_CV_8U: TODO
+ * @GCV_KTYPE_CV_8S: TODO
+ * @GCV_KTYPE_CV_16U: TODO
+ * @GCV_KTYPE_CV_16S: TODO
+ * @GCV_KTYPE_CV_32S: TODO
+ * @GCV_KTYPE_CV_32F: TODO
+ * @GCV_KTYPE_CV_64F: TODO
+ * @GCV_KTYPE_CV_16F: TODO
+ *
+ */
+typedef enum {
+  GCV_KTYPE_CV8U  = 0,
+  GCV_KTYPE_CV8S  = 1,
+  GCV_KTYPE_CV16U = 2,
+  GCV_KTYPE_CV16S = 3,
+  GCV_KTYPE_CV32S = 4,
+  GCV_KTYPE_CV32F = 5,
+  GCV_KTYPE_CV64F = 6,
+  GCV_KTYPE_CV16F = 7
+} GCVKType;
 
 /**********************************************/
 
@@ -317,6 +339,13 @@ GCVImage *gcv_image_build_pyramid(GCVImage *image,
                                   int max_level,
                                   GCVImageFilteringOptions *options,
                                   GError **error);
+
+GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
+                                      int dx,
+                                      int dy,
+                                      int ksize,
+                                      GCVImageFilteringOptions *options,
+                                      GError **error);
 
 GCVImage *gcv_image_laplacian(GCVImage *image,
                               int ddepth,
