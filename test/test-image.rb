@@ -362,9 +362,9 @@ class TestImage < Test::Unit::TestCase
       options.iterations
       options.max_level
 #      options.sigma_y
-p      options.border_type
+      options.border_type
       options.ktype
-      #options.normalize
+      options.normalize?
     end
 
     def test_blur

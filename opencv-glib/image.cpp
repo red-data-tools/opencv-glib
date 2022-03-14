@@ -1331,7 +1331,6 @@ GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
       auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
       GCVKType  ktype = options_priv->ktype;
       gboolean normalize = options_priv->normalize;
-printf("ktype: %d\n",ktype);
 
       cv::getDerivKernels(*cv_image, *cv_converted_image, dx, dy, ksize,
                  normalize, ktype);
