@@ -146,19 +146,19 @@ typedef enum {
   GCV_BORDER_TYPE_BORDER_ISOLATED = 16
 } GCVBorderType;
 
-#define GCV_TYPE_IMAGE_FILTERING_OPTIONS (gcv_image_filtering_options_get_type())
-G_DECLARE_DERIVABLE_TYPE(GCVImageFilteringOptions,
-                         gcv_image_filtering_options,
+#define GCV_TYPE_IMAGE_FILTER_OPTIONS (gcv_image_filter_options_get_type())
+G_DECLARE_DERIVABLE_TYPE(GCVImageFilterOptions,
+                         gcv_image_filter_options,
                          GCV,
-                         IMAGE_FILTERING_OPTIONS,
+                         IMAGE_FILTER_OPTIONS,
                          GObject)
 
-struct _GCVImageFilteringOptionsClass
+struct _GCVImageFilterOptionsClass
 {
   GObjectClass parent_class;
 };
 
-GCVImageFilteringOptions *gcv_image_filtering_options_new(void);
+GCVImageFilterOptions *gcv_image_filter_options_new(void);
 
 /** 
  * GCVKrType:
@@ -311,19 +311,19 @@ GCVImage *gcv_image_bilateral_filter(GCVImage *image,
                                      int d,
                                      double sigma_color,
                                      double sigma_space,
-                                     GCVImageFilteringOptions *options,
+                                     GCVImageFilterOptions *options,
                                      GError **error);
 
 GCVImage *gcv_image_box_filter(GCVImage *image,
                                int ddepth,
                                GCVSize *ksize,
-                               GCVImageFilteringOptions *options,
+                               GCVImageFilterOptions *options,
                                GError **error);
 
 GCVImage *gcv_image_filter2d(GCVImage *image,
                              int ddepth,
                              GCVMatrix *kernel,
-                             GCVImageFilteringOptions *options,
+                             GCVImageFilterOptions *options,
                              GError **error);
 
 GCVImage *gcv_image_median_blur(GCVImage *image,
@@ -332,30 +332,30 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
 
 GCVImage *gcv_image_blur(GCVImage *image,
                                 GCVSize *ksize,
-                                GCVImageFilteringOptions *options,
+                                GCVImageFilterOptions *options,
                                 GError **error);
 
 GCVImage *gcv_image_build_pyramid(GCVImage *image,
                                   int max_level,
-                                  GCVImageFilteringOptions *options,
+                                  GCVImageFilterOptions *options,
                                   GError **error);
 
 GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
                                       int dx,
                                       int dy,
                                       int ksize,
-                                      GCVImageFilteringOptions *options,
+                                      GCVImageFilterOptions *options,
                                       GError **error);
 
 GCVImage *gcv_image_laplacian(GCVImage *image,
                               int ddepth,
-                              GCVImageFilteringOptions *options,
+                              GCVImageFilterOptions *options,
                               GError **error);
 
 GCVImage *gcv_image_sobel(GCVImage *image,
                           int ddepth,
                           int intx,
                           int inty,
-                          GCVImageFilteringOptions *options,
+                          GCVImageFilterOptions *options,
                           GError **error);
 G_END_DECLS

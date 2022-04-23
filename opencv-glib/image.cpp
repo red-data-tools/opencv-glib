@@ -219,16 +219,16 @@ typedef struct {
   gint max_level;
   GCVPoint *anchor;
 // TermCriteria termcrit=TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 5, 1)
-} GCVImageFilteringOptionsPrivate;
+} GCVImageFilterOptionsPrivate;
 
-G_DEFINE_TYPE_WITH_PRIVATE(GCVImageFilteringOptions,
-                           gcv_image_filtering_options,
+G_DEFINE_TYPE_WITH_PRIVATE(GCVImageFilterOptions,
+                           gcv_image_filter_options,
                            G_TYPE_OBJECT)
 
-#define GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object) \
-  static_cast<GCVImageFilteringOptionsPrivate *>(      \
-    gcv_image_filtering_options_get_instance_private(   \
-      GCV_IMAGE_FILTERING_OPTIONS(object)))
+#define GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(object) \
+  static_cast<GCVImageFilterOptionsPrivate *>(      \
+    gcv_image_filter_options_get_instance_private(   \
+      GCV_IMAGE_FILTER_OPTIONS(object)))
 
 // TODO
 enum {
@@ -248,12 +248,12 @@ enum {
 };
 
 static void
-gcv_image_filtering_options_get_property(GObject *object,
+gcv_image_filter_options_get_property(GObject *object,
                                  guint prop_id,
                                  GValue *value,
                                  GParamSpec *pspec)
 {
-  auto priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object);
+  auto priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(object);
 
   switch (prop_id) {
   case PROP_NORMALIZE:
@@ -305,12 +305,12 @@ gcv_image_filtering_options_get_property(GObject *object,
 }
 
 static void
-gcv_image_filtering_options_set_property(GObject *object,
+gcv_image_filter_options_set_property(GObject *object,
                                  guint prop_id,
                                  const GValue *value,
                                  GParamSpec *pspec)
 {
-  auto priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(object);
+  auto priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(object);
 
   switch (prop_id) {
   case PROP_NORMALIZE:
@@ -375,19 +375,19 @@ gcv_image_filtering_options_set_property(GObject *object,
 
 
 static void
-gcv_image_filtering_options_init(GCVImageFilteringOptions *object)
+gcv_image_filter_options_init(GCVImageFilterOptions *object)
 {
 }
 
 static void
-gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
+gcv_image_filter_options_class_init(GCVImageFilterOptionsClass *klass)
 {
   GParamSpec *spec;
 
   auto gobject_class = G_OBJECT_CLASS(klass);
 
-  gobject_class->get_property = gcv_image_filtering_options_get_property;
-  gobject_class->set_property = gcv_image_filtering_options_set_property;
+  gobject_class->get_property = gcv_image_filter_options_get_property;
+  gobject_class->set_property = gcv_image_filter_options_set_property;
 
   spec = g_param_spec_boolean("normalize",
                               "Normalize",
@@ -471,16 +471,16 @@ gcv_image_filtering_options_class_init(GCVImageFilteringOptionsClass *klass)
 }
 
 /**
- * gcv_image_filtering_options_new:
+ * gcv_image_filter_options_new:
  *
- * Returns a newly created #GCVImageFilteringOptions.
+ * Returns a newly created #GCVImageFilterOptions.
  *
  * Since: 1.0.2
  */
-GCVImageFilteringOptions *
-gcv_image_filtering_options_new(void)
+GCVImageFilterOptions *
+gcv_image_filter_options_new(void)
 {
-  return GCV_IMAGE_FILTERING_OPTIONS(g_object_new(GCV_TYPE_IMAGE_FILTERING_OPTIONS,
+  return GCV_IMAGE_FILTER_OPTIONS(g_object_new(GCV_TYPE_IMAGE_FILTER_OPTIONS,
                                                   NULL));
 }
 
@@ -979,7 +979,7 @@ gcv_image_split(GCVImage *image)
  * @d: Diameter of each pixel neighborhood that is used during filtering. If it is non-positive, it is computed from sigmaSpace.
  * @sigma_color: Filter sigma in the color space. A larger value of the parameter means that farther colors within the pixel neighborhood (see sigmaSpace) will be mixed together, resulting in larger areas of semi-equal color.
  * @sigma_space: Filter sigma in the coordinate space. A larger value of the parameter means that farther pixels will influence each other as long as their colors are close enough (see sigmaColor ). When d>0, it specifies the neighborhood size regardless of sigmaSpace. Otherwise, d is proportional to sigmaSpace.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects bilateral filter image. The converted image is returned as
@@ -993,7 +993,7 @@ GCVImage *gcv_image_bilateral_filter(GCVImage *image,
                                      int d,
                                      double sigma_color,
                                      double sigma_space,
-                                     GCVImageFilteringOptions *options,
+                                     GCVImageFilterOptions *options,
                                      GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1001,7 +1001,7 @@ GCVImage *gcv_image_bilateral_filter(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int  border_type = options_priv->border_type;
 
       cv::bilateralFilter(*cv_image, *cv_converted_image,
@@ -1061,7 +1061,7 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
  * gcv_image_blur:
  * @image: A #GCVImage.
  * @ksize: A #GCVSize blurring kernel size.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects blur image. The converted image is returned as
@@ -1073,7 +1073,7 @@ GCVImage *gcv_image_median_blur(GCVImage *image,
  */
 GCVImage *gcv_image_blur(GCVImage *image,
                          GCVSize *ksize,
-                         GCVImageFilteringOptions *options,
+                         GCVImageFilterOptions *options,
                          GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1081,7 +1081,7 @@ GCVImage *gcv_image_blur(GCVImage *image,
   auto cv_converted_image = std::make_shared<cv::Mat>();
 
   if ( options != NULL ) {
-    auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+    auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
 
     auto anchor = cv::Point(-1, -1);
     if (options_priv->anchor) {
@@ -1101,7 +1101,7 @@ GCVImage *gcv_image_blur(GCVImage *image,
  * @image: A #GCVImage.
  * @ddepth: the output image depth
  * @ksize: blurring kernel size.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * HOGE
@@ -1115,7 +1115,7 @@ GCVImage *gcv_image_blur(GCVImage *image,
 GCVImage *gcv_image_box_filter(GCVImage *image,
                                int ddepth,
                                GCVSize *ksize,
-                               GCVImageFilteringOptions *options,
+                               GCVImageFilterOptions *options,
                                GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1124,7 +1124,7 @@ GCVImage *gcv_image_box_filter(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       bool normalize = true;
       int  border_type = options_priv->border_type;
       auto anchor = cv::Point(-1,-1);
@@ -1152,7 +1152,7 @@ GCVImage *gcv_image_box_filter(GCVImage *image,
  * gcv_image_build_pyramid:
  * @image: A #GCVImage.
  * @max_level: 0-based index of the last (the smallest) pyramid layer. It must be non-negative.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * Constructs the Gaussian pyramid for an image
@@ -1164,7 +1164,7 @@ GCVImage *gcv_image_box_filter(GCVImage *image,
  */
 GCVImage *gcv_image_build_pyramid(GCVImage *image,
                                   int max_level,
-                                  GCVImageFilteringOptions *options,
+                                  GCVImageFilterOptions *options,
                                   GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1172,7 +1172,7 @@ GCVImage *gcv_image_build_pyramid(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int  border_type = options_priv->border_type;
 
       cv::buildPyramid(*cv_image, *cv_converted_image,
@@ -1198,7 +1198,7 @@ GCVImage *gcv_image_build_pyramid(GCVImage *image,
  * gcv_image_dilate:
  * @image: A #GCVImage.
  * @kernel: structuring element used for dilation.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * Constructs the dilate filter for an image
@@ -1211,7 +1211,7 @@ GCVImage *gcv_image_build_pyramid(GCVImage *image,
 /*
 GCVImage *gcv_image_dilate(GCVImage *image,
                            GCVMatrix *kernel,
-                           GCVImageFilteringOptions *options,
+                           GCVImageFilterOptions *options,
                            GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1220,7 +1220,7 @@ GCVImage *gcv_image_dilate(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int  iteration = options_priv->iteration;
       int  border_type = options_priv->border_type;
 
@@ -1253,7 +1253,7 @@ GCVImage *gcv_image_dilate(GCVImage *image,
  * @image: A #GCVImage.
  * @ddepth: desired depth of the destination image, see combinations.
  * @kernel: convolution kernel (or rather a correlation kernel), a single-channel floating point matrix; if you want to apply different kernels to different channels, split the image into separate color planes using split and process them individually.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * Constructs the dilate filter for an image
@@ -1266,7 +1266,7 @@ GCVImage *gcv_image_dilate(GCVImage *image,
 GCVImage *gcv_image_filter2d(GCVImage *image,
                              int ddepth,
                              GCVMatrix *kernel,
-                             GCVImageFilteringOptions *options,
+                             GCVImageFilterOptions *options,
                              GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1275,7 +1275,7 @@ GCVImage *gcv_image_filter2d(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int  delta = options_priv->delta;
       int  border_type = options_priv->border_type;
       auto anchor = cv::Point(-1,-1);
@@ -1307,7 +1307,7 @@ GCVImage *gcv_image_filter2d(GCVImage *image,
  * @dx: TODO
  * @dy: TODO
  * @ksize: TODO
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * TODO
@@ -1320,7 +1320,7 @@ GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
                                       int dx,
                                       int dy,
                                       int ksize,
-                                      GCVImageFilteringOptions *options,
+                                      GCVImageFilterOptions *options,
                                       GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1328,7 +1328,7 @@ GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       GCVKType  ktype = options_priv->ktype;
       gboolean normalize = options_priv->normalize;
 
@@ -1353,7 +1353,7 @@ GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
  * gcv_image_laplacian:
  * @image: A #GCVImage.
  * @ddepth: Desired depth of the destination image.
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects laplacian image. The converted image is returned as
@@ -1365,7 +1365,7 @@ GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
  */
 GCVImage *gcv_image_laplacian(GCVImage *image,
                               int ddepth,
-                              GCVImageFilteringOptions *options,
+                              GCVImageFilterOptions *options,
                               GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1373,7 +1373,7 @@ GCVImage *gcv_image_laplacian(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int    ksize       = options_priv->ksize;
       double scale       = options_priv->scale;
       double delta       = options_priv->delta;
@@ -1402,7 +1402,7 @@ GCVImage *gcv_image_laplacian(GCVImage *image,
  * @ddepth: Desired depth of the destination image.
  * @intx: Order of the derivative x
  * @inty: Order of the derivative y
- * @options: (nullable): A #GCVImageFilteringOptions;
+ * @options: (nullable): A #GCVImageFilterOptions;
  * @error: (nullable): Return locatipcn for a #GError or %NULL.
  *
  * It effects sobel image. The converted image is returned as
@@ -1416,7 +1416,7 @@ GCVImage *gcv_image_sobel(GCVImage *image,
                           int ddepth,
                           int intx,
                           int inty,
-                          GCVImageFilteringOptions *options,
+                          GCVImageFilterOptions *options,
                           GError **error)
 {
   auto cv_image = gcv_matrix_get_raw(GCV_MATRIX(image));
@@ -1424,7 +1424,7 @@ GCVImage *gcv_image_sobel(GCVImage *image,
 
   try {
     if ( options != NULL ) {
-      auto options_priv = GCV_IMAGE_FILTERING_OPTIONS_GET_PRIVATE(options);
+      auto options_priv = GCV_IMAGE_FILTER_OPTIONS_GET_PRIVATE(options);
       int    ksize       = options_priv->ksize;
       double scale       = options_priv->scale;
       double delta       = options_priv->delta;

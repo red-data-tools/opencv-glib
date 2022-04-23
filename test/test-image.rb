@@ -355,8 +355,8 @@ class TestImage < Test::Unit::TestCase
       end
 
     end
-    def test_image_filtering_options
-      options = CV::ImageFilteringOptions.new
+    def test_image_filter_options
+      options = CV::ImageFilterOptions.new
       options.delta
       options.scale
       options.iterations
@@ -370,7 +370,7 @@ class TestImage < Test::Unit::TestCase
     def test_blur
       size = CV::Size.new(10, 8)
       blur_image = @image.blur(size)
-      blur_image = @image.blur(size,CV::ImageFilteringOptions.new)
+      blur_image = @image.blur(size,CV::ImageFilterOptions.new)
       assert_not_equal(@image.bytes.to_s,
                        blur_image.bytes.to_s)
     end
@@ -384,7 +384,7 @@ class TestImage < Test::Unit::TestCase
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
 
-      options = CV::ImageFilteringOptions.new
+      options = CV::ImageFilterOptions.new
       options.ktype = 6
       options.normalize = true
       filtered_image = @image.get_deriv_kernels(dx,dy,ksize,options)
@@ -399,7 +399,7 @@ class TestImage < Test::Unit::TestCase
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
 
-      options = CV::ImageFilteringOptions.new
+      options = CV::ImageFilterOptions.new
       options.ksize = 1
 #      options.ksize = 0
       filtered_image = @image.laplacian(ddepth,options)
@@ -413,7 +413,7 @@ class TestImage < Test::Unit::TestCase
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
 
-      options = CV::ImageFilteringOptions.new
+      options = CV::ImageFilterOptions.new
       options.ksize = 1
 #      options.ksize = 0
       filtered_image = @image.filter2d(ddepth,@image,options)
@@ -427,7 +427,7 @@ class TestImage < Test::Unit::TestCase
       assert_not_equal(@image.bytes.to_s,
                        filtered_image.bytes.to_s)
 
-      options = CV::ImageFilteringOptions.new
+      options = CV::ImageFilterOptions.new
       #
       options.ksize = 3
       filtered_image = @image.sobel(ddepth,1,1,options)
