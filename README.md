@@ -84,6 +84,12 @@ On Debian GNU/Linux or Ubuntu:
 % sudo apt install -y -V meson ninja-build gtk-doc-tools libgirepository1.0-dev
 ```
 
+On Fedora:
+
+```text
+sudo dnf install -y meson ninja-build gtk-doc gobject-introspection-devel
+```
+
 On CentOS 7 or later:
 
 ```text
