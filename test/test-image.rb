@@ -353,6 +353,87 @@ class TestImage < Test::Unit::TestCase
       assert_raise(CV::ImageError::Filter.new(message)) do
         @image.median_blur(ksize)
       end
+
+    end
+    def test_image_filter_options
+      options = CV::ImageFilterOptions.new
+      options.delta
+      options.scale
+      options.iterations
+      options.max_level
+#      options.sigma_y
+      options.border_type
+      options.ktype
+      options.normalize?
+    end
+
+    def test_blur
+      size = CV::Size.new(10, 8)
+      blur_image = @image.blur(size)
+      blur_image = @image.blur(size,CV::ImageFilterOptions.new)
+      assert_not_equal(@image.bytes.to_s,
+                       blur_image.bytes.to_s)
+    end
+
+=begin
+    def test_get_deriv_kernels
+      dx = 2
+      dy = 2
+      ksize = 3
+      filtered_image = @image.get_deriv_kernels(dx,dy,ksize)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilterOptions.new
+      options.ktype = 6
+      options.normalize = true
+      filtered_image = @image.get_deriv_kernels(dx,dy,ksize,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
+=end
+
+    def test_laplacian
+      ddepth = 5
+      filtered_image = @image.laplacian(ddepth)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilterOptions.new
+      options.ksize = 1
+#      options.ksize = 0
+      filtered_image = @image.laplacian(ddepth,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
+
+    def test_filter2d
+      ddepth = -1
+      filtered_image = @image.filter2d(ddepth,@image)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilterOptions.new
+      options.ksize = 1
+#      options.ksize = 0
+      filtered_image = @image.filter2d(ddepth,@image,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+    end
+
+    def test_sobel
+      ddepth = 5
+      filtered_image = @image.sobel(ddepth,1,1)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
+      options = CV::ImageFilterOptions.new
+      #
+      options.ksize = 3
+      filtered_image = @image.sobel(ddepth,1,1,options)
+      assert_not_equal(@image.bytes.to_s,
+                       filtered_image.bytes.to_s)
+
     end
   end
 end

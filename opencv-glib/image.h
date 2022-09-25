@@ -110,6 +110,82 @@ struct _GCVDrawingOptionsClass
 
 GCVDrawingOptions *gcv_drawing_options_new(void);
 
+/**********************************************/
+
+/**
+ * GCVBorderTypes:
+ * @GCV_BORDER_TYPE_BORDER_CONSTANT: See `cv::BorderTypes::BORDER_CONSTANT`.
+ * @GCV_BORDER_TYPE_BORDER_REPLICATE : See `cv::BorderTypes::BORDER_REPLICATE `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT : See `cv::BorderTypes::BORDER_REFLECT `.
+ * @GCV_BORDER_TYPE_BORDER_WRAP : See `cv::BorderTypes::BORDER_WRAP `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT_101 : See `cv::BorderTypes::BORDER_REFLECT_101 `.
+ * @GCV_BORDER_TYPE_BORDER_TRANSPARENT : See `cv::BorderTypes::BORDER_TRANSPARENT `.
+ * @GCV_BORDER_TYPE_BORDER_REFLECT101 : See `cv::BorderTypes::BORDER_REFLECT101 `.
+ * @GCV_BORDER_TYPE_BORDER_DEFAULT : See `cv::BorderTypes::BORDER_DEFAULT `.
+ * @GCV_BORDER_TYPE_BORDER_ISOLATED : See `cv::BorderTypes::BORDER_ISOLATED `.
+ *
+ * Line type for drawing functions corresponding to `cv::BorderTypes`.
+ *
+ * See also [OpenCV documents](https://docs.opencv.org/).
+ *
+ * We don't have a link to the latest `cv::border_types` document.
+ * But we can link to a specific version:
+ * [OpenCV `cv::border_types`]().
+ *
+ * Since 1.0.2
+ */
+typedef enum {
+  GCV_BORDER_TYPE_BORDER_CONSTANT = 0,
+  GCV_BORDER_TYPE_BORDER_REPLICATE = 1,
+  GCV_BORDER_TYPE_BORDER_REFLECT = 2,
+  GCV_BORDER_TYPE_BORDER_WRAP = 3,
+  GCV_BORDER_TYPE_BORDER_REFLECT_101 = 4,
+  GCV_BORDER_TYPE_BORDER_TRANSPARENT = 5,
+  GCV_BORDER_TYPE_BORDER_REFLECT101 = GCV_BORDER_TYPE_BORDER_REFLECT_101,
+  GCV_BORDER_TYPE_BORDER_DEFAULT = GCV_BORDER_TYPE_BORDER_REFLECT_101,
+  GCV_BORDER_TYPE_BORDER_ISOLATED = 16
+} GCVBorderType;
+
+#define GCV_TYPE_IMAGE_FILTER_OPTIONS (gcv_image_filter_options_get_type())
+G_DECLARE_DERIVABLE_TYPE(GCVImageFilterOptions,
+                         gcv_image_filter_options,
+                         GCV,
+                         IMAGE_FILTER_OPTIONS,
+                         GObject)
+
+struct _GCVImageFilterOptionsClass
+{
+  GObjectClass parent_class;
+};
+
+GCVImageFilterOptions *gcv_image_filter_options_new(void);
+
+/** 
+ * GCVKrType:
+ * @GCV_KTYPE_CV_8U: TODO
+ * @GCV_KTYPE_CV_8S: TODO
+ * @GCV_KTYPE_CV_16U: TODO
+ * @GCV_KTYPE_CV_16S: TODO
+ * @GCV_KTYPE_CV_32S: TODO
+ * @GCV_KTYPE_CV_32F: TODO
+ * @GCV_KTYPE_CV_64F: TODO
+ * @GCV_KTYPE_CV_16F: TODO
+ *
+ */
+typedef enum {
+  GCV_KTYPE_CV8U  = 0,
+  GCV_KTYPE_CV8S  = 1,
+  GCV_KTYPE_CV16U = 2,
+  GCV_KTYPE_CV16S = 3,
+  GCV_KTYPE_CV32S = 4,
+  GCV_KTYPE_CV32F = 5,
+  GCV_KTYPE_CV64F = 6,
+  GCV_KTYPE_CV16F = 7
+} GCVKType;
+
+/**********************************************/
+
+
 /**
  * GCVImageReadFlags:
  * @GCV_IMAGE_READ_FLAG_UNCHANGED: See `cv::IMREAD_UNCHANGED`.
@@ -143,7 +219,7 @@ GCVDrawingOptions *gcv_drawing_options_new(void);
  * But we can link to a specific version:
  * [OpenCV 3.4.1's `cv::ImreadModes`](https://docs.opencv.org/3.4.1/d4/da8/group__imgcodecs.html#ga61d9b0126a3e57d9277ac48327799c80).
  *
- * Since: 1.0.0
+ * Since: 1.0.4
  */
 typedef enum { /*< flags >*/
   GCV_IMAGE_READ_FLAG_UNCHANGED = -1,
@@ -231,8 +307,55 @@ gcv_image_abs_diff(GCVImage *image,
 
 GList *gcv_image_split(GCVImage *image);
 
+GCVImage *gcv_image_bilateral_filter(GCVImage *image,
+                                     int d,
+                                     double sigma_color,
+                                     double sigma_space,
+                                     GCVImageFilterOptions *options,
+                                     GError **error);
+
+GCVImage *gcv_image_box_filter(GCVImage *image,
+                               int ddepth,
+                               GCVSize *ksize,
+                               GCVImageFilterOptions *options,
+                               GError **error);
+
+GCVImage *gcv_image_filter2d(GCVImage *image,
+                             int ddepth,
+                             GCVMatrix *kernel,
+                             GCVImageFilterOptions *options,
+                             GError **error);
+
 GCVImage *gcv_image_median_blur(GCVImage *image,
                                 gint ksize,
                                 GError **error);
 
+GCVImage *gcv_image_blur(GCVImage *image,
+                                GCVSize *ksize,
+                                GCVImageFilterOptions *options,
+                                GError **error);
+
+GCVImage *gcv_image_build_pyramid(GCVImage *image,
+                                  int max_level,
+                                  GCVImageFilterOptions *options,
+                                  GError **error);
+
+GCVImage *gcv_image_get_deriv_kernels(GCVImage *image,
+                                      int dx,
+                                      int dy,
+                                      int ksize,
+                                      GCVImageFilterOptions *options,
+                                      GError **error);
+
+GCVImage *gcv_image_laplacian(GCVImage *image,
+                              int ddepth,
+                              GCVImageFilterOptions *options,
+                              GError **error);
+
+GCVImage *gcv_image_sobel(GCVImage *image,
+                          int ddepth,
+                          int intx,
+                          int inty,
+                          GCVImageFilterOptions *options,
+                          GError **error);
 G_END_DECLS
